@@ -207,7 +207,7 @@ Score:"""
             return 0.5  # Default middle score on error
 
     @traceable(name="decision_logic_3_choices_with_separate_tools")
-    async def tool_call_or_helpful(self, state: AgentState) -> Literal["continue", "arxiv_tools", "tavily_tools", "compose", "end"]:
+    async def tool_call_or_helpful(self, state: AgentState) -> Literal["arxiv_tools", "tavily_tools", "action"]:
         """
         Makes 3 important decisions like a smart study buddy with separate tool routing:
         
@@ -232,36 +232,73 @@ Score:"""
                 elif tool_call['name'] == 'tavily_examples':
                     return "tavily_tools"
         
-        # Decision 2: "Have I talked too much?" (more than 10 messages)
+        # If no tool calls, check if we should compose a response
+        return "action"
+
+    @traceable(name="should_continue_decision_gate")
+    async def should_continue(self, state: AgentState) -> Literal["continue", "end"]:
+        """
+        DECISION GATE: Should we continue the workflow or end it?
+        
+        This is a proper decision diamond that evaluates:
+        1. "Have I talked too much?" - If >10 messages, END (enough chatting!)
+        2. "Is my answer good enough?" - Ask GPT-4o-mini to grade the response
+        
+        Args:
+            state: Current agent state
+            
+        Returns:
+            "continue" or "end"
+        """
+        messages = state["messages"]
+        
+        # Decision 1: "Have I talked too much?" (more than 10 messages)
         if len(messages) > 10:
             return "end"
         
+        # Check if we have an AI response to evaluate
+        last_ai_message = None
+        for msg in reversed(messages):
+            if isinstance(msg, AIMessage) and not hasattr(msg, 'tool_calls'):
+                last_ai_message = msg
+                break
+        
+        if not last_ai_message:
+            return "continue"  # No response to evaluate yet
+        
+        # Decision 2: "Is my answer good enough?" - Use GPT-4o-mini to evaluate
+        helpfulness_score = await self.check_helpfulness(state)
+        
+        # Update state with helpfulness score
+        state["helpfulness_score"] = helpfulness_score
+        
+        # If answer is good enough (>= 0.7), we're done!
+        if helpfulness_score >= 0.7:
+            return "end"
+        else:
+            return "continue"
+
+    @traceable(name="action_router")
+    def route_action(self, state: AgentState) -> Literal["compose", "agent"]:
+        """
+        Route to compose response or continue with agent based on research status.
+        
+        Args:
+            state: Current agent state
+            
+        Returns:
+            "compose" or "agent"
+        """
         # Check if we have sufficient research for composition
         arxiv_complete = state.get("arxiv_complete", False)
         tavily_complete = state.get("tavily_complete", False)
         iteration_count = state.get("iteration_count", 0)
         
-        # If both research types complete or max iterations reached, consider composition
+        # If both research types complete or max iterations reached, compose
         if (arxiv_complete and tavily_complete) or iteration_count >= 4:
-            # Decision 3: "Is my answer good enough?" - but only if we have a response to evaluate
-            if last_message and isinstance(last_message, AIMessage) and not hasattr(last_message, 'tool_calls'):
-                helpfulness_score = await self.check_helpfulness(state)
-                
-                # Update state with helpfulness score
-                state["helpfulness_score"] = helpfulness_score
-                
-                # If answer is good enough (>= 0.7), we're done!
-                if helpfulness_score >= 0.7:
-                    return "end"
-                else:
-                    # Answer isn't helpful enough, try composing a better response
-                    return "compose"
-            else:
-                # No response to evaluate yet, compose one
-                return "compose"
-        
-        # Default: continue if no clear decision
-        return "continue"
+            return "compose"
+        else:
+            return "agent"
 
     @traceable(name="extract_arxiv_results")
     def extract_arxiv_results(self, state: AgentState) -> AgentState:
@@ -355,7 +392,7 @@ Score:"""
 
     def _build_graph(self) -> StateGraph:
         """
-        Build the agent-based LangGraph workflow with separate tool nodes and helpfulness checking.
+        Build the agent-based LangGraph workflow with proper decision gate structure.
         
         Returns:
             Configured StateGraph ready for compilation
@@ -364,6 +401,8 @@ Score:"""
 
         # Add nodes
         workflow.add_node("agent", self.call_model)
+        workflow.add_node("should_continue", self.should_continue)  # Decision diamond
+        workflow.add_node("action", self.route_action)  # Action router
         workflow.add_node("arxiv_tools", self.arxiv_node)
         workflow.add_node("tavily_tools", self.tavily_node)
         workflow.add_node("extract_arxiv", self.extract_arxiv_results)
@@ -373,15 +412,33 @@ Score:"""
         # Set entry point
         workflow.add_edge(START, "agent")
         
-        # Add conditional edges with the 3-decision logic + specific tool routing
+        # Agent decides on tool calls or routes to action
         workflow.add_conditional_edges(
             "agent",
             self.tool_call_or_helpful,
             {
-                "continue": "agent",
                 "arxiv_tools": "arxiv_tools",
                 "tavily_tools": "tavily_tools", 
+                "action": "action"
+            }
+        )
+        
+        # Action router determines next step
+        workflow.add_conditional_edges(
+            "action",
+            self.route_action,
+            {
                 "compose": "compose",
+                "agent": "should_continue"
+            }
+        )
+        
+        # DECISION GATE: Should we continue or end?
+        workflow.add_conditional_edges(
+            "should_continue",
+            self.should_continue,
+            {
+                "continue": "agent",
                 "end": END
             }
         )
@@ -394,8 +451,8 @@ Score:"""
         workflow.add_edge("extract_arxiv", "agent")
         workflow.add_edge("extract_tavily", "agent")
         
-        # Compose leads to end
-        workflow.add_edge("compose", END)
+        # Compose leads to decision gate
+        workflow.add_edge("compose", "should_continue")
 
         return workflow
 
@@ -550,8 +607,8 @@ Score:"""
         graph = self.compiled_graph.get_graph()
         
         return {
-            "workflow_name": "ReplySight Smart Study Buddy with Separate Tool Nodes",
-            "workflow_type": "agent_based_with_separate_tools_and_helpfulness_checking",
+            "workflow_name": "ReplySight Smart Study Buddy with Decision Gate",
+            "workflow_type": "agent_based_with_decision_gate_and_helpfulness_checking",
             "node_count": len(graph.nodes),
             "edge_count": len(graph.edges),
             "has_cycles": True,  # Agent can loop back based on decisions
@@ -560,15 +617,16 @@ Score:"""
             "mermaid_diagram": self.get_graph_visualization(),
             "execution_flow": [
                 "START → agent (analyze complaint)",
-                "agent → arxiv_tools (if ArXiv research needed) [Decision 1a]",
-                "agent → tavily_tools (if Tavily examples needed) [Decision 1b]",
-                "agent → END (if >10 messages) [Decision 2]", 
-                "agent → END (if helpful enough ≥0.7) [Decision 3]",
-                "agent → compose (if research complete but not helpful) [Decision 3]",
-                "agent → agent (if needs improvement) [Default]",
+                "agent → arxiv_tools (if ArXiv research needed)",
+                "agent → tavily_tools (if Tavily examples needed)",
+                "agent → action (route to next step)",
+                "action → compose (if research complete)",
+                "action → should_continue (if more work needed)",
+                "should_continue → continue (back to agent)",
+                "should_continue → end (if >10 messages or helpful ≥0.7)",
                 "arxiv_tools → extract_arxiv → agent",
                 "tavily_tools → extract_tavily → agent",
-                "compose → END"
+                "compose → should_continue (decision gate)"
             ],
             "decision_logic": [
                 {

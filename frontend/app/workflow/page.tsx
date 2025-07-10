@@ -1,5 +1,5 @@
-import GraphVisualization from '../../components/GraphVisualization';
+import { WorkflowVisualization } from '@/components';
 
 export default function WorkflowPage() {
-  return <GraphVisualization />;
+  return <WorkflowVisualization />;
 } 
