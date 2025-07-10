@@ -7,98 +7,75 @@
 
 'use client'
 
-import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Badge } from '@/components/ui/badge'
-import { LoaderIcon, ClockIcon, BookOpenIcon } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
+import React from 'react';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { LoaderIcon, MessageSquareIcon, ClockIcon, BookOpenIcon, CheckCircleIcon } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
-interface ApiResponse {
-  reply: string
-  citations: string[]
-  latency_ms: number
-}
+// Custom hooks and components
+import { useComplaintForm } from '@/hooks/useComplaintForm';
+import PageHeader from '@/components/PageHeader';
+import StatsGrid from '@/components/StatsGrid';
+
+// Constants and types
+import { UI_CONSTANTS, APP_CONFIG, PAGE_METADATA } from '@/constants';
 
 export default function ReplySight() {
-  const [complaint, setComplaint] = useState('')
-  const [response, setResponse] = useState<ApiResponse | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!complaint.trim()) return
-
-    setLoading(true)
-    setError('')
-    setResponse(null)
-
-    try {
-      const res = await fetch('/api/respond', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          complaint: complaint.trim(),
-          customer_id: 'demo-user',
-          priority: 'normal'
-        })
-      })
-
-      if (!res.ok) {
-        throw new Error(`API Error: ${res.status}`)
-      }
-
-      const data: ApiResponse = await res.json()
-      setResponse(data)
-      
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const clearForm = () => {
-    setComplaint('')
-    setResponse(null)
-    setError('')
-  }
+  const {
+    complaint,
+    response,
+    loading,
+    error,
+    setComplaint,
+    handleSubmit,
+    clearForm,
+  } = useComplaintForm();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            ReplySight
-          </h1>
-          <p className="text-gray-600">
-            Research-backed customer service response generation
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Header */}
+      <PageHeader
+        title={PAGE_METADATA.MAIN.title}
+        description={PAGE_METADATA.MAIN.description}
+        showWorkflowButton={true}
+      />
 
-        {/* Input Form */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BookOpenIcon className="h-5 w-5" />
-              Customer Complaint
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Textarea
-                value={complaint}
-                onChange={(e) => setComplaint(e.target.value)}
-                placeholder="Paste the customer complaint here..."
-                className="min-h-[120px] resize-none"
-                disabled={loading}
-              />
-              <div className="flex gap-2">
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Stats Cards */}
+        <StatsGrid />
+
+        {/* Main Interface */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+          <div className="px-6 py-4 border-b border-gray-100">
+            <h2 className="text-xl font-semibold text-gray-900">
+              {PAGE_METADATA.MAIN.sections.GENERATE.title}
+            </h2>
+            <p className="text-gray-600 text-sm mt-1">
+              {PAGE_METADATA.MAIN.sections.GENERATE.description}
+            </p>
+          </div>
+          
+          <div className="p-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="complaint" className="block text-sm font-medium text-gray-700 mb-2">
+                  Customer Complaint
+                </label>
+                <Textarea
+                  id="complaint"
+                  value={complaint}
+                  onChange={(e) => setComplaint(e.target.value)}
+                  placeholder={UI_CONSTANTS.PLACEHOLDERS.COMPLAINT}
+                  className="resize-none"
+                  style={{ minHeight: `${APP_CONFIG.TEXTAREA_MIN_HEIGHT}px` }}
+                  disabled={loading}
+                />
+              </div>
+              
+              <div className="flex gap-3">
                 <Button
                   type="submit"
                   disabled={loading || !complaint.trim()}
@@ -107,10 +84,13 @@ export default function ReplySight() {
                   {loading ? (
                     <>
                       <LoaderIcon className="h-4 w-4 mr-2 animate-spin" />
-                      Generating Response...
+                      {UI_CONSTANTS.LOADING_MESSAGES.GENERATING}
                     </>
                   ) : (
-                    'Generate Response'
+                    <>
+                      <MessageSquareIcon className="h-4 w-4 mr-2" />
+                      {UI_CONSTANTS.BUTTON_LABELS.GENERATE}
+                    </>
                   )}
                 </Button>
                 <Button
@@ -119,41 +99,62 @@ export default function ReplySight() {
                   onClick={clearForm}
                   disabled={loading}
                 >
-                  Clear
+                  {UI_CONSTANTS.BUTTON_LABELS.CLEAR}
                 </Button>
               </div>
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Error Display */}
         {error && (
-          <Card className="border-red-200 bg-red-50">
-            <CardContent className="pt-6">
+          <div className="bg-white rounded-xl shadow-sm border border-red-200 overflow-hidden mb-8">
+            <div className="px-6 py-4 border-b border-red-200 bg-red-50">
+              <h2 className="text-xl font-semibold text-red-800">
+                {UI_CONSTANTS.STATUS_LABELS.ERROR}
+              </h2>
+              <p className="text-red-600 text-sm mt-1">
+                Something went wrong while generating the response
+              </p>
+            </div>
+            <div className="p-6">
               <p className="text-red-700">{error}</p>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Response Display */}
         {response && (
-          <Card>
-            <CardHeader>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100">
               <div className="flex items-center justify-between">
-                <CardTitle>Generated Response</CardTitle>
-                <div className="flex items-center gap-2">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    {PAGE_METADATA.MAIN.sections.RESPONSE.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm mt-1">
+                    {PAGE_METADATA.MAIN.sections.RESPONSE.description}
+                  </p>
+                </div>
+                <div className="flex items-center space-x-3">
                   <Badge variant="secondary" className="flex items-center gap-1">
                     <ClockIcon className="h-3 w-3" />
                     {response.latency_ms}ms
                   </Badge>
-                  <Badge variant="outline">
-                    {response.citations.length} citation{response.citations.length !== 1 ? 's' : ''}
+                  <Badge variant="outline" className="flex items-center gap-1">
+                    <BookOpenIcon className="h-3 w-3" />
+                    {response.citations.length} source{response.citations.length !== 1 ? 's' : ''}
+                  </Badge>
+                  <Badge variant="outline" className="flex items-center gap-1">
+                    <CheckCircleIcon className="h-3 w-3" />
+                    Research-backed
                   </Badge>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+            </div>
+            
+            <div className="p-6">
+              <div className="space-y-6">
                 {/* Response Text */}
                 <div className="prose max-w-none">
                   <ReactMarkdown>{response.reply}</ReactMarkdown>
@@ -161,44 +162,56 @@ export default function ReplySight() {
 
                 {/* Citations */}
                 {response.citations.length > 0 && (
-                  <div className="border-t pt-4">
-                    <h4 className="font-semibold mb-2">Citations & Sources:</h4>
-                    <ul className="space-y-1">
+                  <div className="border-t pt-6">
+                    <h4 className="font-semibold mb-3 text-gray-900">Citations & Sources</h4>
+                    <div className="space-y-2">
                       {response.citations.map((citation, index) => (
-                        <li key={index} className="text-sm text-gray-600">
-                          {citation.startsWith('http') ? (
-                            <a
-                              href={citation}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline"
-                            >
-                              {citation}
-                            </a>
-                          ) : (
-                            citation
-                          )}
-                        </li>
+                        <div key={index} className="flex items-start space-x-3">
+                          <div className="flex-shrink-0 w-6 h-6 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-xs font-semibold">
+                            {index + 1}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            {citation.startsWith('http') ? (
+                              <a
+                                href={citation}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline text-sm break-all"
+                              >
+                                {citation}
+                              </a>
+                            ) : (
+                              <p className="text-sm text-gray-700">{citation}</p>
+                            )}
+                          </div>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 )}
 
-                {/* Copy Button */}
-                <div className="flex justify-end">
+                {/* Action Buttons */}
+                <div className="flex justify-end space-x-3 pt-4 border-t">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => navigator.clipboard.writeText(response.reply)}
                   >
-                    Copy Response
+                    {UI_CONSTANTS.BUTTON_LABELS.COPY}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={clearForm}
+                  >
+                    {UI_CONSTANTS.BUTTON_LABELS.GENERATE_NEW}
                   </Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
       </div>
     </div>
-  )
+  );
 }

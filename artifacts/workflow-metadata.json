@@ -1,0 +1,23 @@
+{
+  "workflow_name": "ReplySight Customer Service Response Generator",
+  "node_count": 4,
+  "edge_count": 3,
+  "has_cycles": false,
+  "nodes": [
+    "__start__",
+    "fetch_parallel",
+    "compose_response",
+    "__end__"
+  ],
+  "edges": [
+    "__start__ \u2192 fetch_parallel",
+    "fetch_parallel \u2192 compose_response",
+    "compose_response \u2192 __end__"
+  ],
+  "mermaid_diagram": "---\nconfig:\n  flowchart:\n    curve: linear\n---\ngraph TD;\n\t__start__([<p>__start__</p>]):::first\n\tfetch_parallel(fetch_parallel)\n\tcompose_response(compose_response)\n\t__end__([<p>__end__</p>]):::last\n\t__start__ --> fetch_parallel;\n\tfetch_parallel --> compose_response;\n\tcompose_response --> __end__;\n\tclassDef default fill:#f2f0ff,line-height:1.2\n\tclassDef first fill-opacity:0\n\tclassDef last fill:#bfb6fc\n",
+  "execution_flow": [
+    "START \u2192 fetch_parallel (arXiv + Tavily in parallel)",
+    "fetch_parallel \u2192 compose_response (GPT-4o-mini synthesis)",
+    "compose_response \u2192 END"
+  ]
+}

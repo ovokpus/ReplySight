@@ -6,63 +6,39 @@ customer service responses, with integrated LangSmith tracing and latency
 tracking for business metrics.
 """
 
-import os
 from typing import Dict, Any
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from langsmith import traceable
 import uvicorn
 
-from backend.graph import create_replysight_graph
+from backend.config import get_settings
+from backend.models import ComplaintRequest, ResponseOutput
+from backend.services import WorkflowService, GraphService
 
 
-class ComplaintRequest(BaseModel):
-    """
-    Request model for customer complaint submissions.
-    
-    This model validates and structures incoming complaint data
-    for processing by the ReplySight workflow.
-    """
-
-    complaint: str
-    customer_id: str = None
-    priority: str = "normal"
-
-
-class ResponseOutput(BaseModel):
-    """
-    Response model for generated customer service replies.
-    
-    This model structures the API response with the generated reply,
-    supporting citations, and latency metrics for business tracking.
-    """
-
-    reply: str
-    citations: list[str]
-    latency_ms: int
-
+# Initialize settings
+settings = get_settings()
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="ReplySight API",
-    description="Research-backed customer service response generation",
-    version="1.0.0"
+    title=settings.app_name,
+    description=settings.app_description,
+    version=settings.app_version
 )
 
 # Add CORS middleware for frontend integration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=settings.allow_origins,
+    allow_credentials=settings.allow_credentials,
+    allow_methods=settings.allow_methods,
+    allow_headers=settings.allow_headers,
 )
 
-# Initialize ReplySight graph
-graph = create_replysight_graph(
-    tavily_api_key=os.getenv("TAVILY_API_KEY")
-)
+# Initialize services
+workflow_service = WorkflowService(tavily_api_key=settings.tavily_api_key)
+graph_service = GraphService(tavily_api_key=settings.tavily_api_key)
 
 
 @app.post("/respond", response_model=ResponseOutput)
@@ -85,13 +61,8 @@ async def respond_to_complaint(request: ComplaintRequest) -> ResponseOutput:
         HTTPException: If complaint processing fails
     """
     try:
-        result = await graph.generate_response(request.complaint)
-
-        return ResponseOutput(
-            reply=result["reply"],
-            citations=result["citations"],
-            latency_ms=result["latency_ms"]
-        )
+        result = await workflow_service.generate_response(request)
+        return result
 
     except Exception as e:
         raise HTTPException(
@@ -101,41 +72,64 @@ async def respond_to_complaint(request: ComplaintRequest) -> ResponseOutput:
 
 
 @app.get("/health")
-async def health_check() -> Dict[str, str]:
+async def health_check() -> Dict[str, Any]:
     """
     Health check endpoint for monitoring and deployment verification.
     
     Returns:
-        Dictionary with service status and version information
+        Dictionary with service status and system health information
     """
-    return {
-        "status": "healthy",
-        "service": "ReplySight API",
-        "version": "1.0.0"
-    }
+    try:
+        # Perform comprehensive health check
+        workflow_health = workflow_service.health_check()
+        
+        return {
+            "status": "healthy" if workflow_health["status"] == "healthy" else "unhealthy",
+            "service": settings.app_name,
+            "version": settings.app_version,
+            "workflow": workflow_health,
+            "dependencies": {
+                "openai": bool(settings.openai_api_key),
+                "tavily": bool(settings.tavily_api_key),
+                "langsmith": settings.langsmith_enabled
+            }
+        }
+    
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "service": settings.app_name,
+            "version": settings.app_version,
+            "error": str(e)
+        }
 
 
-@app.get("/metrics")
-async def get_metrics() -> Dict[str, Any]:
+@app.get("/workflow/graph")
+async def get_workflow_graph() -> Dict[str, Any]:
     """
-    Endpoint for retrieving business metrics and system performance.
+    Endpoint for retrieving the workflow graph visualization.
+    
+    This endpoint provides Mermaid diagram code and metadata for 
+    displaying the ReplySight workflow in web interfaces.
     
     Returns:
-        Dictionary with latency statistics and cost calculations
+        Dictionary with Mermaid diagram, metadata, and graph structure
     """
-    # In production, this would pull from actual metrics storage
-    return {
-        "avg_latency_ms": 1847,
-        "cost_per_ticket": 0.12,
-        "handle_time_reduction": 0.3,
-        "estimated_annual_savings": 286000
-    }
+    try:
+        metadata = graph_service.get_workflow_metadata()
+        return metadata
+    
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error generating workflow visualization: {str(e)}"
+        )
 
 
 if __name__ == "__main__":
     uvicorn.run(
         "api:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True
+        host=settings.host,
+        port=settings.port,
+        reload=settings.reload
     )
