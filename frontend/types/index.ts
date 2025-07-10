@@ -25,7 +25,7 @@ export interface GraphData {
 }
 
 // Component Props Types
-export interface GraphVisualizationProps {
+export interface WorkflowVisualizationProps {
   apiUrl?: string;
 }
 
