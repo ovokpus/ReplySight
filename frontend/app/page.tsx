@@ -7,149 +7,55 @@
 
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Badge } from '@/components/ui/badge'
-import { LoaderIcon, ClockIcon, BookOpenIcon, MessageSquareIcon, TrendingUpIcon, ZapIcon, CheckCircleIcon } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
+import React from 'react';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { LoaderIcon, MessageSquareIcon, ClockIcon, BookOpenIcon, CheckCircleIcon } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
-interface ApiResponse {
-  reply: string
-  citations: string[]
-  latency_ms: number
-}
+// Custom hooks and components
+import { useComplaintForm } from '@/hooks/useComplaintForm';
+import PageHeader from '@/components/PageHeader';
+import StatsGrid from '@/components/StatsGrid';
+
+// Constants and types
+import { UI_CONSTANTS, APP_CONFIG, PAGE_METADATA } from '@/constants';
 
 export default function ReplySight() {
-  const [complaint, setComplaint] = useState('')
-  const [response, setResponse] = useState<ApiResponse | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!complaint.trim()) return
-
-    setLoading(true)
-    setError('')
-    setResponse(null)
-
-    try {
-      const res = await fetch('/api/respond', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          complaint: complaint.trim(),
-          customer_id: 'demo-user',
-          priority: 'normal'
-        })
-      })
-
-      if (!res.ok) {
-        throw new Error(`API Error: ${res.status}`)
-      }
-
-      const data: ApiResponse = await res.json()
-      setResponse(data)
-      
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const clearForm = () => {
-    setComplaint('')
-    setResponse(null)
-    setError('')
-  }
+  const {
+    complaint,
+    response,
+    loading,
+    error,
+    setComplaint,
+    handleSubmit,
+    clearForm,
+  } = useComplaintForm();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">ReplySight</h1>
-              <p className="text-gray-600 mt-1">Research-backed customer service response generation</p>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                Active
-              </div>
-              <Link href="/workflow">
-                <Button variant="outline">
-                  View Workflow
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        title={PAGE_METADATA.MAIN.title}
+        description={PAGE_METADATA.MAIN.description}
+        showWorkflowButton={true}
+      />
 
-      {/* Stats Cards */}
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <MessageSquareIcon className="w-6 h-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">AI-Powered</p>
-                <p className="text-2xl font-bold text-gray-900">GPT-4o</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <BookOpenIcon className="w-6 h-6 text-green-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Research Sources</p>
-                <p className="text-2xl font-bold text-gray-900">ArXiv + Web</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <ZapIcon className="w-6 h-6 text-purple-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Avg Response</p>
-                <p className="text-2xl font-bold text-gray-900">~2s</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <TrendingUpIcon className="w-6 h-6 text-yellow-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Quality Score</p>
-                <p className="text-2xl font-bold text-gray-900">92%</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Stats Cards */}
+        <StatsGrid />
 
         {/* Main Interface */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-900">Generate Response</h2>
-            <p className="text-gray-600 text-sm mt-1">Enter a customer complaint to generate an empathetic, research-backed response</p>
+            <h2 className="text-xl font-semibold text-gray-900">
+              {PAGE_METADATA.MAIN.sections.GENERATE.title}
+            </h2>
+            <p className="text-gray-600 text-sm mt-1">
+              {PAGE_METADATA.MAIN.sections.GENERATE.description}
+            </p>
           </div>
           
           <div className="p-6">
@@ -162,8 +68,9 @@ export default function ReplySight() {
                   id="complaint"
                   value={complaint}
                   onChange={(e) => setComplaint(e.target.value)}
-                  placeholder="Paste the customer complaint here..."
-                  className="min-h-[120px] resize-none"
+                  placeholder={UI_CONSTANTS.PLACEHOLDERS.COMPLAINT}
+                  className="resize-none"
+                  style={{ minHeight: `${APP_CONFIG.TEXTAREA_MIN_HEIGHT}px` }}
                   disabled={loading}
                 />
               </div>
@@ -177,12 +84,12 @@ export default function ReplySight() {
                   {loading ? (
                     <>
                       <LoaderIcon className="h-4 w-4 mr-2 animate-spin" />
-                      Generating Response...
+                      {UI_CONSTANTS.LOADING_MESSAGES.GENERATING}
                     </>
                   ) : (
                     <>
                       <MessageSquareIcon className="h-4 w-4 mr-2" />
-                      Generate Response
+                      {UI_CONSTANTS.BUTTON_LABELS.GENERATE}
                     </>
                   )}
                 </Button>
@@ -192,7 +99,7 @@ export default function ReplySight() {
                   onClick={clearForm}
                   disabled={loading}
                 >
-                  Clear
+                  {UI_CONSTANTS.BUTTON_LABELS.CLEAR}
                 </Button>
               </div>
             </form>
@@ -203,8 +110,12 @@ export default function ReplySight() {
         {error && (
           <div className="bg-white rounded-xl shadow-sm border border-red-200 overflow-hidden mb-8">
             <div className="px-6 py-4 border-b border-red-200 bg-red-50">
-              <h2 className="text-xl font-semibold text-red-800">Error</h2>
-              <p className="text-red-600 text-sm mt-1">Something went wrong while generating the response</p>
+              <h2 className="text-xl font-semibold text-red-800">
+                {UI_CONSTANTS.STATUS_LABELS.ERROR}
+              </h2>
+              <p className="text-red-600 text-sm mt-1">
+                Something went wrong while generating the response
+              </p>
             </div>
             <div className="p-6">
               <p className="text-red-700">{error}</p>
@@ -218,8 +129,12 @@ export default function ReplySight() {
             <div className="px-6 py-4 border-b border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">Generated Response</h2>
-                  <p className="text-gray-600 text-sm mt-1">AI-powered empathetic customer service response</p>
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    {PAGE_METADATA.MAIN.sections.RESPONSE.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm mt-1">
+                    {PAGE_METADATA.MAIN.sections.RESPONSE.description}
+                  </p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Badge variant="secondary" className="flex items-center gap-1">
@@ -282,14 +197,14 @@ export default function ReplySight() {
                     size="sm"
                     onClick={() => navigator.clipboard.writeText(response.reply)}
                   >
-                    Copy Response
+                    {UI_CONSTANTS.BUTTON_LABELS.COPY}
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={clearForm}
                   >
-                    Generate New
+                    {UI_CONSTANTS.BUTTON_LABELS.GENERATE_NEW}
                   </Button>
                 </div>
               </div>
@@ -298,5 +213,5 @@ export default function ReplySight() {
         )}
       </div>
     </div>
-  )
+  );
 }
