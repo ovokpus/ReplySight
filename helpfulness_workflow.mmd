@@ -1,0 +1,34 @@
+graph TD
+    START([🚀 Start]) --> agent[🧠 Smart Study Buddy Agent]
+    
+    agent --> decision{🤔 3 Important Decisions}
+    
+    %% Decision 1: Do I need tools?
+    decision -->|"📚 Decision 1:<br/>Do I need to use tools?"| action[🔍 Research Action<br/>ArXiv + Tavily]
+    
+    %% Decision 2: Have I talked too much?
+    decision -->|"💬 Decision 2:<br/>More than 10 messages?"| END1([🛑 End - Enough Chatting])
+    
+    %% Decision 3: Is my answer good enough?
+    decision -->|"⭐ Decision 3:<br/>Is my answer helpful?"| helpful{🎯 Helpfulness Check<br/>GPT-4o-mini Evaluator}
+    
+    %% Helpfulness evaluation paths
+    helpful -->|"✅ Score ≥ 0.7<br/>Good enough!"| END2([🎉 End - Success])
+    helpful -->|"❌ Score < 0.7<br/>Try again!"| agent
+    
+    %% Action flow
+    action --> process[📊 Process Results<br/>Extract Research Data]
+    process --> agent
+    
+    %% Styling
+    classDef startEnd fill:#e1f5fe
+    classDef agent fill:#f3e5f5
+    classDef decision fill:#fff3e0
+    classDef action fill:#e8f5e8
+    classDef process fill:#fce4ec
+    
+    class START,END1,END2 startEnd
+    class agent agent
+    class decision,helpful decision
+    class action action
+    class process process 
