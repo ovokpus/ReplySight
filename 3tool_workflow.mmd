@@ -1,0 +1,27 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	agent(agent)
+	arxiv_tools(arxiv_tools)
+	tavily_tools(tavily_tools)
+	extract_arxiv(extract_arxiv)
+	extract_tavily(extract_tavily)
+	compose(compose)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> agent;
+	agent -.-> arxiv_tools;
+	agent -.-> compose;
+	agent -.-> tavily_tools;
+	arxiv_tools --> extract_arxiv;
+	extract_arxiv --> agent;
+	extract_tavily --> agent;
+	tavily_tools --> extract_tavily;
+	compose --> __end__;
+	agent -. &nbsp;decide&nbsp; .-> agent;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

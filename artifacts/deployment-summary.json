@@ -1,0 +1,14 @@
+{
+  "timestamp": 1752182431.3737411,
+  "workflow_name": "ReplySight Customer Service Response Generator",
+  "artifacts_generated": [
+    "mermaid",
+    "metadata",
+    "png"
+  ],
+  "visualization_urls": {
+    "mermaid_live": "https://mermaid.live",
+    "documentation": "./artifacts/workflow.mmd"
+  },
+  "deployment_ready": true
+}

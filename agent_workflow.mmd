@@ -1,0 +1,22 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	agent(agent)
+	tools(tools)
+	extract_results(extract_results)
+	compose(compose)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> agent;
+	agent -.-> compose;
+	agent -.-> tools;
+	extract_results --> agent;
+	tools --> extract_results;
+	compose --> __end__;
+	agent -. &nbsp;decide&nbsp; .-> agent;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc
