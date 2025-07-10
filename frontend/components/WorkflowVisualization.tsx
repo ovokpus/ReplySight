@@ -2,13 +2,13 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
-import { GraphVisualizationProps } from '@/types';
+import { WorkflowVisualizationProps } from '@/types';
 import { useGraphData } from '@/hooks/useGraphData';
 import { useMermaid } from '@/hooks/useMermaid';
 import { LoadingState, ErrorState } from '@/components';
 import { UI_CONSTANTS, PAGE_METADATA } from '@/constants';
 
-interface WorkflowVisualizationProps extends GraphVisualizationProps {
+interface ExtendedWorkflowVisualizationProps extends WorkflowVisualizationProps {
   /** Component height */
   height?: string;
   /** Whether to show metadata alongside the diagram */
@@ -17,7 +17,7 @@ interface WorkflowVisualizationProps extends GraphVisualizationProps {
   theme?: 'default' | 'dark' | 'forest' | 'base';
 }
 
-const WorkflowVisualization: React.FC<WorkflowVisualizationProps> = ({
+const WorkflowVisualization: React.FC<ExtendedWorkflowVisualizationProps> = ({
   apiUrl,
   height = '600px',
   showMetadata = true,
