@@ -221,4 +221,33 @@ Ready for prod? `vercel --prod` ships the whole stack in under a minute.
 
 ---
 
+## 🎯 Demo Scenarios (Copy-Paste Ready)
+
+Below are **seven diverse, copy-pasteable interaction scenarios** you can run against a live **ReplySight** deployment to show off its range.
+For each one you'll see the raw **customer complaint**, the key things the **API reply** should contain, and which kinds of **citations** the agent is expected to surface.
+
+| #                       | Customer Complaint (paste into UI or `/respond`)                                                                           | What a Good ReplySight Draft Will Include                                                                                                               | Likely Citations\*                                                                                     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **1**<br>(happy-path)   | *"The right earbud stopped charging after one week and your site says I'm not eligible for a return. This is ridiculous."* | • Sincere apology<br>• Instant prepaid return label + replacement offer<br>• 1–2 bullets why proactive compensation prevents churn                      | • arXiv paper on apology & service-recovery effectiveness<br>• Forbes "MAMA Method" article            |
+| **2**<br>(multilingual) | *"¡Llevo dos semanas esperando mi número de seguimiento! Esto es inaceptable."*                                            | • Reply **in Spanish**<br>• New ETA date & free-shipping upgrade<br>• Evidence bullets on expectation-setting                                           | • arXiv study on empathy in Spanish CS chat-bots<br>• UPS blog post on transparency and ETA updates    |
+| **3**                   | *"Your 30-day return policy is unfair. My watch strap broke on day 35—can I get a refund or not?"*                         | • Empathetic tone, extends policy as goodwill<br>• Explains lifetime defect warranty clause<br>• Bullet citing fairness heuristics                      | • Journal article on procedural fairness (arXiv)<br>• Competitor FAQ with 60-day grace period          |
+| **4**<br>(French)       | *"Le manuel ne mentionne rien sur la garantie batterie. C'est combien de temps ?"*                                         | • Answer in **French**<br>• States battery warranty (e.g., 18 mo.)<br>• Link to warranty PDF<br>• Bullet on clarity reducing support load               | • arXiv paper on multilingual CX clarity<br>• Anker blog piece outlining battery warranties            |
+| **5**                   | *"The companion app keeps crashing on Android 15 beta—no logs, just closes."*                                              | • Apology + immediate beta-tester acknowledgment<br>• Steps to capture logs + link to patch ETA<br>• Bullet on rapid bug acknowledgement and user trust | • arXiv research on error framing & user trust<br>• GitHub issue / release-note from a similar product |
+| **6**                   | *"I'm legally blind and your smart speaker beeps the same for on/off. How do I know its status?"*                          | • Recognizes accessibility need<br>• Offers firmware with distinct tonal cues<br>• Bullet on inclusive design boosts NPS                                | • arXiv HCI paper on multisensory feedback<br>• WCAG blog post or Apple accessibility guideline        |
+| **7**                   | *"You charged me twice for the same order (#21871). Fix this or I'm filing a dispute."*                                    | • Immediate apology + refund confirmation<br>• 10 % discount on next purchase<br>• Bullet citing loss-aversion research on goodwill gestures            | • arXiv study on loss-aversion in e-commerce<br>• Stripe/Shopify doc on double-charge resolution       |
+
+\*Actual URLs will be filled in by the agent at runtime via the arXiv and Tavily tools.
+
+### 🧪 **What to Watch For**
+
+Run these through your deployed endpoint and watch:
+
+1. **Latency badge** stay under ≈ 2-3 s.
+2. **Reply** arrive in the customer's language, with empathic tone.
+3. **"Why you received this solution"** bullets cite both an academic source *and* a fresh web article.
+
+That mix demonstrates every core capability—parallel evidence fetch, multilingual drafting, policy look-ups, accessibility awareness, and tangible ROI via handle-time cuts.
+
+---
+
 > **ReplySight** – because every frustrated customer deserves a response backed by science, not guesswork.
