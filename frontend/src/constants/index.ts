@@ -1,10 +1,31 @@
-// API Endpoints - Environment aware
-const isProduction = process.env.NODE_ENV === 'production';
-const API_PREFIX = isProduction ? '/api' : '/proxy';
+// API Configuration
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 
+  (process.env.NODE_ENV === 'production' 
+    ? 'https://your-railway-app.up.railway.app' // Will be updated with actual Railway URL
+    : 'http://localhost:8000'
+  );
 
+// Workflow Configuration
+export const WORKFLOW_CONFIG = {
+  maxTokens: 1000,
+  temperature: 0.7,
+  model: 'gpt-4o-mini',
+  timeout: 30000, // 30 seconds
+};
+
+// API Endpoints
 export const API_ENDPOINTS = {
-  RESPOND: `${API_PREFIX}/respond`,
-  WORKFLOW_GRAPH: `${API_PREFIX}/workflow/graph`,
+  respond: '/respond',
+  health: '/health',
+  workflowGraph: '/workflow/graph',
+} as const;
+
+// UI Configuration
+export const UI_CONFIG = {
+  maxComplaintLength: 2000,
+  minComplaintLength: 10,
+  debounceDelay: 300,
+  maxRetries: 3,
 } as const;
 
 // App Configuration

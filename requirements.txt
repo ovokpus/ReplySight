@@ -2,7 +2,7 @@
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 
-# LangChain ecosystem (minimal production versions)
+# LangChain ecosystem (production versions)
 langchain>=0.1.20,<0.3.0
 langgraph>=0.0.60,<0.3.0
 langsmith>=0.1.0,<0.2.0
@@ -16,12 +16,17 @@ httpx>=0.25.2,<1.0.0
 
 # Data validation
 pydantic>=2.5.0,<3.0.0
+pydantic-settings>=2.1.0,<3.0.0
 
 # Environment configuration
 python-dotenv>=1.0.0,<2.0.0
+
+# Type hints
+typing-extensions>=4.8.0
 
 # Tavily API client
 tavily-python>=0.2.2,<1.0.0
 
 # Essential LangChain dependencies
 PyYAML>=5.3
+jsonpatch>=1.33

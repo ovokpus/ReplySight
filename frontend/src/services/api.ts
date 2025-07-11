@@ -1,77 +1,102 @@
-import { ApiResponse, ComplaintRequest, GraphData } from '@/types';
-import { API_ENDPOINTS, APP_CONFIG, ERROR_MESSAGES } from '@/constants';
+import { API_BASE_URL, API_ENDPOINTS, UI_CONFIG } from '@/constants';
 
-// Base API class with common functionality
+export interface ComplaintRequest {
+  complaint: string;
+  customer_info?: Record<string, any>;
+}
+
+export interface ResponseOutput {
+  response: string;
+  latency_ms: number;
+  status: string;
+  citations?: Array<{
+    title: string;
+    url: string;
+    source: string;
+  }>;
+}
+
+export interface WorkflowGraphResponse {
+  mermaid: string;
+  metadata: {
+    version: string;
+    status: string;
+    note?: string;
+  };
+}
+
 class ApiService {
   private baseUrl: string;
 
-  constructor(baseUrl: string = '') {
-    // Use environment variable or default to current origin for Vercel deployment
-    this.baseUrl = baseUrl || process.env.NEXT_PUBLIC_API_BASE_URL || '';
+  constructor() {
+    this.baseUrl = API_BASE_URL;
   }
 
-  private async handleResponse<T>(response: Response): Promise<T> {
+  async generateResponse(complaint: string): Promise<ResponseOutput> {
+    const request: ComplaintRequest = {
+      complaint: complaint.trim(),
+      customer_info: {}
+    };
+
+    const response = await fetch(`${this.baseUrl}${API_ENDPOINTS.respond}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    });
+
     if (!response.ok) {
-      throw new Error(`${ERROR_MESSAGES.API_ERROR}: ${response.status}`);
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
     }
+
     return response.json();
   }
 
-  private async makeRequest<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`;
-    
-    const defaultOptions: RequestInit = {
+  async getWorkflowGraph(): Promise<WorkflowGraphResponse> {
+    const response = await fetch(`${this.baseUrl}${API_ENDPOINTS.workflowGraph}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...options.headers,
       },
-    };
+    });
 
-    const finalOptions = { ...defaultOptions, ...options };
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
 
+    return response.json();
+  }
+
+  async healthCheck(): Promise<{ status: string; service: string; version: string }> {
+    const response = await fetch(`${this.baseUrl}${API_ENDPOINTS.health}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Health check failed: ${response.status}`);
+    }
+
+    return response.json();
+  }
+
+  // Utility method to check if API is available
+  async isApiAvailable(): Promise<boolean> {
     try {
-      const response = await fetch(url, finalOptions);
-      return this.handleResponse<T>(response);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      }
-      throw new Error(ERROR_MESSAGES.UNKNOWN_ERROR);
+      await this.healthCheck();
+      return true;
+    } catch {
+      return false;
     }
   }
 
-  // Generate response from complaint
-  async generateResponse(complaint: string): Promise<ApiResponse> {
-    const request: ComplaintRequest = {
-      complaint: complaint.trim(),
-      customer_id: APP_CONFIG.DEFAULT_CUSTOMER_ID,
-      priority: APP_CONFIG.DEFAULT_PRIORITY,
-    };
-
-    return this.makeRequest<ApiResponse>(API_ENDPOINTS.RESPOND, {
-      method: 'POST',
-      body: JSON.stringify(request),
-    });
-  }
-
-  // Fetch workflow graph data
-  async fetchGraphData(): Promise<GraphData> {
-    return this.makeRequest<GraphData>(API_ENDPOINTS.WORKFLOW_GRAPH);
+  // Get current API base URL (useful for debugging)
+  getApiBaseUrl(): string {
+    return this.baseUrl;
   }
 }
 
-// Export singleton instance
-export const apiService = new ApiService();
-
-// Export individual functions for convenience
-export const generateResponse = (complaint: string) => 
-  apiService.generateResponse(complaint);
-
-export const fetchGraphData = () => 
-  apiService.fetchGraphData();
-
-// Export the class for testing or custom instances
-export { ApiService }; 
+export const apiService = new ApiService(); 
