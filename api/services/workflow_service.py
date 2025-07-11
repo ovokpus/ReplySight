@@ -15,10 +15,10 @@ try:
     from ..models import ComplaintRequest, ResponseOutput
     from ..graph import create_replysight_graph
 except ImportError:
-    # Fall back to direct imports (when Railway runs from api/ directory)
-    from config import get_settings
-    from models.api_models import ComplaintRequest, ResponseOutput
-    from graph import create_replysight_graph
+    # Fall back to direct imports (when Railway runs from root directory)
+    from api.config import get_settings
+    from api.models.api_models import ComplaintRequest, ResponseOutput
+    from api.graph import create_replysight_graph
 
 
 class WorkflowService:

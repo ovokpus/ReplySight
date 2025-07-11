@@ -25,8 +25,8 @@ try:
     # Try relative imports first (when imported as a module)
     from .tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
 except ImportError:
-    # Fall back to direct imports (when Railway runs from api/ directory)
-    from tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
+    # Fall back to direct imports (when Railway runs from root directory)
+    from api.tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
 
 
 class AgentState(TypedDict):

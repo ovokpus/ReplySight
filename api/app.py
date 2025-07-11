@@ -18,11 +18,11 @@ try:
     from .models import ComplaintRequest, ResponseOutput
     from .services import WorkflowService, GraphService
 except ImportError:
-    # Fall back to direct imports (when Railway runs from api/ directory)
-    from config import get_settings
-    from models.api_models import ComplaintRequest, ResponseOutput
-    from services.workflow_service import WorkflowService
-    from services.graph_service import GraphService
+    # Fall back to direct imports (when Railway runs from root directory)
+    from api.config import get_settings
+    from api.models.api_models import ComplaintRequest, ResponseOutput
+    from api.services.workflow_service import WorkflowService
+    from api.services.graph_service import GraphService
 
 
 # Initialize settings
