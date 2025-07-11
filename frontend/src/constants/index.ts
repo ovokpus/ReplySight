@@ -1,7 +1,7 @@
 // API Configuration
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 
   (process.env.NODE_ENV === 'production' 
-    ? 'https://your-railway-app.up.railway.app' // Will be updated with actual Railway URL
+    ? 'https://replysight-production.up.railway.app'
     : 'http://localhost:8000'
   );
 
