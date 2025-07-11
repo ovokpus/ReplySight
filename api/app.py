@@ -12,24 +12,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from langsmith import traceable
 import uvicorn
 
-try:
-    # Try relative imports first (when imported as a module)
-    from .config import get_settings
-    from .models import ComplaintRequest, ResponseOutput
-    from .services import WorkflowService, GraphService
-except ImportError:
-    try:
-        # Fall back to local imports (when Railway copies api/ to root)
-        from config import get_settings
-        from models.api_models import ComplaintRequest, ResponseOutput
-        from services.workflow_service import WorkflowService
-        from services.graph_service import GraphService
-    except ImportError:
-        # Fall back to direct imports (when Railway runs from root directory)
-        from api.config import get_settings
-        from api.models.api_models import ComplaintRequest, ResponseOutput
-        from api.services.workflow_service import WorkflowService
-        from api.services.graph_service import GraphService
+# try:
+# Try relative imports first (when imported as a module)
+from config import get_settings
+from models import ComplaintRequest, ResponseOutput
+from services import WorkflowService, GraphService
+
 
 
 # Initialize settings
