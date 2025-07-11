@@ -295,3 +295,4 @@ Thumbs.db
 # Frontend generated files
 *.tgz
 *.tar.gz
+.vercel
