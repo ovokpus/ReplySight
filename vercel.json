@@ -1,27 +1,11 @@
 {
   "version": 2,
-  "rewrites": [
-    {
-      "source": "/api/respond",
-      "destination": "/api/respond.py"
-    },
-    {
-      "source": "/api/health",
-      "destination": "/api/health.py"
-    },
-    {
-      "source": "/api/workflow/graph",
-      "destination": "/api/workflow/graph.py"
-    },
-    {
-      "source": "/((?!api).*)",
-      "destination": "/frontend/$1"
-    }
-  ],
-
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/.next",
+  "installCommand": "cd frontend && npm install",
+  "framework": "nextjs",
   "env": {
-    "API_BASE_URL": "https://replysight.vercel.app",
+    "API_BASE_URL": "http://localhost:8000",
     "NODE_ENV": "production"
-  },
-  "regions": ["iad1"]
+  }
 }
