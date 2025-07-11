@@ -1,6 +1,8 @@
-# 🎧 ReplySight – Instant Research-Backed Customer-Service Replies
+# 🎧 ReplySight
 
-## - Powered by an Agentic Artificial Intelligence Workflow
+## Instant Research-Backed Customer-Service Replies
+
+### Powered by an Agentic AI Workflow
 
 > **Turn raw frustration into loyalty** &mdash; _one evidence-filled reply at a time._
 
@@ -31,6 +33,8 @@ Yet the answers already live in two places:
 The result: **30% lower handle-time** and a **1% churn drop**, worth roughly **$286k per year** for a 120k-order DTC gadget shop.
 
 ---
+
+**Try out the [Application](https://reply-sight-oqjioqljy-ovo-okpubulukus-projects.vercel.app/) here.**
 
 ---
 

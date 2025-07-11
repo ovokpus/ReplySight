@@ -5,7 +5,8 @@
 | Branch Name | Status | Description | 
 |-------------|--------|-------------|
 | `main` | ✅ **Active** | Primary development branch |
-| `feature/merge-backend-api` | 🚧 **Current** | Unified API structure implementation |
+| `feature/merge-backend-api` | ✅ **Merged** | Unified API structure implementation (pushed to origin) |
+| `update-readme-heading-url` | 🚧 **Current** | README heading and URL updates |
 | `deploy-debug` | ✅ **Available** | Critical deployment fixes |
 | `integrate-openai-gpt4o` | ✅ **Available** | Frontend/backend refactoring |
 | `fix-backend-setup` | ✅ **Merged** | Backend infrastructure fixes |
@@ -13,44 +14,23 @@
 
 ---
 
-## 🎯 Current Feature: Unified API Directory Structure
+## 🎯 Current Feature: README Heading and URL Updates
 
-**Branch:** `feature/merge-backend-api`  
+**Branch:** `update-readme-heading-url`  
 **Target:** `main`  
-**Type:** Major structural improvement
+**Type:** Documentation enhancement
 
 ### 📋 Changes Summary
 
-This feature implements a unified `api/` directory structure that works seamlessly for both local development and Vercel deployment.
+This feature updates the README.md with:
+- Updated main heading/title
+- Application URL addition for easy access
+- Improved project presentation
 
 #### Key Improvements:
-- ✅ **Unified Structure**: Single `api/` directory for both local dev and serverless
-- ✅ **Modular Organization**: Clean separation of models, services, config, and utils
-- ✅ **Local Development**: `api/server.py` for local FastAPI development
-- ✅ **Serverless Ready**: Functions in `api/` for Vercel deployment
-- ✅ **Comprehensive Documentation**: Updated all markdown files
-- ✅ **Environment Management**: Template-based configuration
-
-#### Project Structure:
-```
-ReplySight/
-├── api/                    # Unified API directory
-│   ├── app.py             # FastAPI application
-│   ├── server.py          # Local development server
-│   ├── respond.py         # Serverless response function
-│   ├── health.py          # Health check function
-│   ├── graph.py           # LangGraph workflow
-│   ├── tools.py           # LangChain research tools
-│   ├── config/            # Configuration management
-│   ├── models/            # Data models
-│   ├── services/          # Business logic
-│   ├── utils/             # Utility functions
-│   └── workflow/          # Workflow functions
-├── frontend/              # Next.js application
-├── tests/                 # Test suites
-├── .env.development       # Environment template
-└── DEVELOPMENT.md         # Local dev guide
-```
+- ✅ **Updated Heading**: Refreshed main project title
+- ✅ **Application URL**: Added live application link for easy access
+- ✅ **Better Presentation**: Enhanced project introduction
 
 ---
 
@@ -60,12 +40,12 @@ ReplySight/
 
 1. **Create Pull Request:**
    ```bash
-   git push origin feature/merge-backend-api
+   git push origin update-readme-heading-url
    ```
    - Go to [GitHub Repository](https://github.com/ovokpus/ReplySight)
    - Click "Compare & pull request"
-   - Title: `feat: implement unified API directory structure`
-   - Description: Reference this MERGE.md file
+   - Title: `docs: update README heading and add application URL`
+   - Description: Updated project title and added live application link
    - Request review if needed
 
 2. **Merge and Clean Up:**
@@ -73,19 +53,19 @@ ReplySight/
    # After PR approval
    git checkout main
    git pull origin main
-   git branch -d feature/merge-backend-api
+   git branch -d update-readme-heading-url
    ```
 
 ### Option 2: GitHub CLI
 
 ```bash
 # Push and create PR
-git push origin feature/merge-backend-api
+git push origin update-readme-heading-url
 gh pr create \
-  --title "feat: implement unified API directory structure" \
-  --body "Implements unified api/ directory for local dev and Vercel deployment. See MERGE.md for details." \
+  --title "docs: update README heading and add application URL" \
+  --body "Updates project title and adds live application link for better presentation." \
   --base main \
-  --head feature/merge-backend-api
+  --head update-readme-heading-url
 
 # Merge when ready
 gh pr merge --squash --delete-branch
@@ -97,11 +77,11 @@ gh pr merge --squash --delete-branch
 # Switch to main and merge
 git checkout main
 git pull origin main
-git merge feature/merge-backend-api
+git merge update-readme-heading-url
 git push origin main
 
 # Clean up
-git branch -d feature/merge-backend-api
+git branch -d update-readme-heading-url
 ```
 
 ---
