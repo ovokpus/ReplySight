@@ -308,3 +308,136 @@ git branch -d integrate-openai-gpt4o
 7. **📊 Business Case Enhancement** - Expanded documentation with detailed ROI analysis
 8. **🔧 Production Ready** - Fixed frontend build issues and comprehensive documentation
 9. **🎯 Demo-Ready** - Added comprehensive test scenarios for showcasing capabilities 
+
+# Merge Instructions for API Structure Unification
+
+## 🎯 **Feature: Unified API Directory Structure**
+
+**Branch:** `feature/merge-backend-api`  
+**Target:** `main`  
+**Type:** Major structural improvement
+
+## 📋 **Changes Summary**
+
+This feature merges the `backend/` and `api_backup/` directories into a single unified `api/` directory that works seamlessly for both local development and Vercel deployment.
+
+### Key Changes:
+- ✅ **Merged Directories**: Combined `backend/` and `api_backup/` → `api/`
+- ✅ **Preserved Functionality**: All existing features maintained
+- ✅ **Updated Imports**: Fixed FastAPI app to use relative imports  
+- ✅ **Local Development**: Added `api/server.py` for local FastAPI serving
+- ✅ **Dev Scripts**: Added convenient npm scripts for development
+- ✅ **Documentation**: Created comprehensive `DEVELOPMENT.md` guide
+- ✅ **Environment Setup**: Created `.env.development` template
+
+### Files Added:
+- `api/server.py` - Local development server
+- `DEVELOPMENT.md` - Local development guide
+- `.env.development` - Environment template
+
+### Files Moved/Renamed:
+- `backend/*` → `api/backend/*` (all backend logic)
+- `api_backup/*` → `api/*` (serverless functions)
+
+## 🧪 **Testing Completed**
+
+- ✅ All Python imports work correctly
+- ✅ FastAPI app initializes successfully
+- ✅ Serverless functions can import backend modules
+- ✅ Frontend dependencies installed and ready
+- ✅ Virtual environment with `uv` working properly
+
+## 🚀 **Merge Options**
+
+### Option A: GitHub Pull Request
+
+1. **Push the feature branch:**
+   ```bash
+   git push origin feature/merge-backend-api
+   ```
+
+2. **Create PR on GitHub:**
+   - Go to your repository on GitHub
+   - Click "Compare & pull request"
+   - Title: "feat: merge backend and api_backup into unified api directory"
+   - Description: Link to this MERGE.md file
+   - Request review if needed
+   - Merge when approved
+
+3. **Clean up after merge:**
+   ```bash
+   git checkout main
+   git pull origin main
+   git branch -d feature/merge-backend-api
+   ```
+
+### Option B: GitHub CLI
+
+1. **Push and create PR:**
+   ```bash
+   git push origin feature/merge-backend-api
+   gh pr create --title "feat: merge backend and api_backup into unified api directory" \
+                --body "Unifies API structure for both local and Vercel deployment. See MERGE.md for details." \
+                --base main \
+                --head feature/merge-backend-api
+   ```
+
+2. **Merge the PR:**
+   ```bash
+   gh pr merge --merge  # or --squash or --rebase based on preference
+   ```
+
+3. **Clean up:**
+   ```bash
+   git checkout main
+   git pull origin main
+   git branch -d feature/merge-backend-api
+   ```
+
+## 🎉 **Post-Merge Verification**
+
+After merging to main, verify the setup works:
+
+1. **Test Local Development:**
+   ```bash
+   # In project root
+   cp .env.development .env.local
+   # Add your API keys to .env.local
+   
+   # Terminal 1: Start API
+   cd api && python server.py
+   
+   # Terminal 2: Start frontend  
+   cd frontend && npm run dev
+   ```
+
+2. **Test Vercel Deployment:**
+   ```bash
+   vercel --prod
+   ```
+
+3. **Verify Endpoints:**
+   - Local API: http://localhost:8000/health
+   - Local Frontend: http://localhost:3000
+   - Production: https://your-app.vercel.app/api/health
+
+## 📚 **Documentation Updated**
+
+- `DEVELOPMENT.md` - Complete local development guide
+- `README.md` - Should be updated post-merge to reflect new structure
+- `DEPLOYMENT.md` - Already configured for this structure
+
+## 🔧 **Breaking Changes**
+
+**None** - This is a structural change that maintains all existing functionality. The API endpoints and frontend behavior remain identical.
+
+## 🎯 **Next Steps After Merge**
+
+1. **Update README.md** to reflect the new structure
+2. **Test full deployment pipeline** 
+3. **Update any CI/CD configs** if needed
+4. **Share new development setup** with team
+
+---
+
+**Ready to merge! 🚀** This creates a clean, unified structure that works perfectly for both local development and Vercel production deployment. 
