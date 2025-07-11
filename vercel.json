@@ -4,8 +4,13 @@
   "outputDirectory": "frontend/.next",
   "installCommand": "cd frontend && npm install",
   "framework": "nextjs",
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "python3.9",
+      "maxDuration": 30
+    }
+  },
   "env": {
-    "API_BASE_URL": "http://localhost:8000",
-    "NODE_ENV": "production"
+    "NEXT_PUBLIC_API_BASE_URL": ""
   }
 }

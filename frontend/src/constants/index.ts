@@ -1,7 +1,10 @@
-// API Endpoints
+// API Endpoints - Environment aware
+const isProduction = process.env.NODE_ENV === 'production';
+const API_PREFIX = isProduction ? '/api' : '/proxy';
+
 export const API_ENDPOINTS = {
-  RESPOND: '/api/respond',
-  WORKFLOW_GRAPH: '/api/workflow/graph',
+  RESPOND: `${API_PREFIX}/respond`,
+  WORKFLOW_GRAPH: `${API_PREFIX}/workflow/graph`,
 } as const;
 
 // App Configuration
