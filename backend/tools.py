@@ -168,6 +168,48 @@ class ResponseComposerTool(BaseTool):
     name: str = "response_composer"
     description: str = "Compose empathetic responses using research insights and examples with GPT-4o-mini"
     
+    def _format_for_ui(self, response: str) -> str:
+        """
+        Format response as proper Markdown for ReactMarkdown display.
+        
+        Args:
+            response: Raw response text from LLM
+            
+        Returns:
+            Properly formatted Markdown text
+        """
+        # Split response into paragraphs
+        paragraphs = response.strip().split('\n\n')
+        markdown_paragraphs = []
+        
+        for paragraph in paragraphs:
+            paragraph = paragraph.strip()
+            if not paragraph:
+                continue
+                
+            # Check if this paragraph contains solution options
+            lines = paragraph.split('\n')
+            if len(lines) > 1 and any('replacement' in line.lower() or 'refund' in line.lower() or 'store credit' in line.lower() or 'option' in line.lower() for line in lines):
+                # This looks like a solutions section
+                processed_lines = []
+                for line in lines:
+                    line = line.strip()
+                    if line:
+                        # Convert to Markdown list if it's a solution option
+                        if (any(pattern in line.lower() for pattern in ['replacement', 'refund', 'store credit', 'discount', 'repair', 'exchange']) 
+                            and not line.lower().startswith(('to address', 'here are', 'please', 'i want'))):
+                            if not line.startswith(('- ', '* ', '1.')):
+                                line = f"- {line}"
+                        processed_lines.append(line)
+                
+                markdown_paragraphs.append('\n'.join(processed_lines))
+            else:
+                # Regular paragraph
+                markdown_paragraphs.append(paragraph)
+        
+        # Join paragraphs with double line breaks (proper Markdown)
+        return '\n\n'.join(markdown_paragraphs)
+    
     def _initialize_llm(self):
         """Initialize the LLM and prompt chain."""
         llm = ChatOpenAI(
@@ -199,7 +241,16 @@ class ResponseComposerTool(BaseTool):
                 7. Keep the tone warm, professional, and solution-focused
                 8. Be specific and actionable, not generic
 
-                Generate a customer service response that demonstrates exceptional empathy while addressing their concerns with concrete solutions.
+                FORMATTING REQUIREMENTS FOR MARKDOWN DISPLAY:
+                - Format as clean Markdown text for web display
+                - Use triple line breaks between paragraphs for proper spacing  
+                - Use Markdown list format (- item) for solution options only
+                - Keep paragraphs concise (2-3 sentences max)
+                - Structure: greeting paragraph, empathy paragraph, solutions list, closing paragraph
+                - Do NOT use symbols like • or other special characters
+                - Ensure clean, readable formatting for web interface
+
+                Generate a well-formatted, empathetic customer service response in clean Markdown format.
 
                 RESPONSE:""")
         
@@ -258,8 +309,11 @@ class ResponseComposerTool(BaseTool):
             # Remove empty citations
             citations = [c for c in citations if c]
             
+            # Format response for better UI display
+            formatted_response = self._format_for_ui(response.strip())
+            
             return {
-                'response': response.strip(),
+                'response': formatted_response,
                 'citations': citations,
                 'sentiment': 'ai_generated'
             }
