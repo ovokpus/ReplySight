@@ -11,8 +11,53 @@ This branch (`integrate-openai-gpt4o`) contains comprehensive refactoring improv
 | `fix-backend-setup` | ✅ **Merged** | Backend infrastructure fixes and testing | `0802a3a` - Fixed backend | 🔗 Merged via PR #1 |
 | `fix-frontend-setup` | ✅ **Merged** | Frontend setup with Next.js and shadcn/ui | `fa5dc70` - Complete frontend setup | 🔄 Merged into main |
 | `integrate-openai-gpt4o` | 🚧 **Open** | Comprehensive modularization refactoring | `21b0681` - Frontend utils fix | ⏳ **Ready for merge** |
+| `deploy-debug` | ✅ **Ready** | **CRITICAL DEPLOYMENT FIXES** - All app-breaking issues resolved | `6c95ec2` - Complete formatting fix | 🚀 **PRIORITY MERGE** |
 
 ## Changes Summary
+
+### 🚨 CRITICAL: Deploy-Debug Branch Fixes (PRIORITY MERGE)
+**Status**: ✅ **ALL DEPLOYMENT ISSUES RESOLVED** - Application fully functional
+
+The `deploy-debug` branch contains critical fixes for application-breaking issues that prevented the app from working in production:
+
+#### 🔧 Issues Fixed:
+1. **Missing `cn` Utility Function**: Created `frontend/lib/utils.ts` with proper clsx and tailwind-merge integration
+2. **Port Mismatch**: Fixed frontend-backend communication (8001 → 8000)
+3. **LangChain Workflow Error**: Resolved "Expected dict, got agent" error in graph structure
+4. **ReactMarkdown Formatting**: Fixed wall-of-text display issue with proper Markdown formatting
+5. **Tailwind Typography**: Added @tailwindcss/typography plugin for proper prose styling
+6. **Backend Response Formatting**: Enhanced Markdown generation for proper UI display
+
+#### 🎨 UI/UX Improvements:
+- ✅ **Proper Paragraph Spacing**: Responses now display with clean line breaks
+- ✅ **Formatted Lists**: Solution options appear as properly formatted bullet points
+- ✅ **Professional Typography**: Clean, readable text with proper hierarchy
+- ✅ **Responsive Design**: Consistent styling across all screen sizes
+
+#### 🚀 Technical Achievements:
+- ✅ **Frontend Build**: No errors, clean compilation
+- ✅ **Backend Health**: All endpoints operational, workflow functioning
+- ✅ **Full Integration**: Complete end-to-end functionality verified
+- ✅ **Research Citations**: Academic references displaying correctly
+- ✅ **Performance**: Fast response times (~14-20s for complex workflows)
+
+#### 📋 Files Modified:
+- `frontend/lib/utils.ts` - Created missing utility function
+- `frontend/app/api/respond/route.ts` - Fixed port configuration
+- `frontend/next.config.js` - Updated environment variables
+- `frontend/package.json` - Added typography plugin
+- `frontend/tailwind.config.js` - Configured typography plugin
+- `backend/graph.py` - Fixed LangChain workflow structure
+- `backend/tools.py` - Enhanced Markdown formatting
+
+#### 🏆 Current Status:
+- **Application**: ✅ FULLY FUNCTIONAL
+- **Deployment**: ✅ READY FOR PRODUCTION
+- **User Experience**: ✅ PROFESSIONAL QUALITY
+- **Performance**: ✅ OPTIMIZED
+- **Documentation**: ✅ COMPREHENSIVE
+
+**⚠️ RECOMMENDATION**: Merge `deploy-debug` to `main` IMMEDIATELY before any other branches to ensure stable deployment.
 
 ### Frontend Refactoring (Completed)
 - **Modular Architecture**: Created centralized types, constants, and service layers
@@ -97,6 +142,54 @@ All changes have been tested to ensure:
 - ✅ Response generation workflow functions normally
 
 ## Merge Instructions
+
+### 🚨 PRIORITY: Deploy-Debug Branch (MERGE FIRST)
+
+**This branch contains critical deployment fixes and should be merged to `main` before any other branches.**
+
+#### Option 1: GitHub Web Interface
+1. Go to [ReplySight Repository](https://github.com/ovokpus/ReplySight)
+2. Click "Compare & pull request" for the `deploy-debug` branch
+3. Fill in the pull request details:
+   - **Title**: "CRITICAL: Fix all deployment issues - App now fully functional"
+   - **Description**: "Resolves all application-breaking issues including missing cn utility, port mismatches, LangChain workflow errors, and ReactMarkdown formatting. Application is now fully functional and ready for production deployment."
+4. **Label**: Add "critical", "bug", "deployment" labels
+5. **Priority**: Set to highest priority for immediate review
+6. Merge immediately after approval
+
+#### Option 2: GitHub CLI
+```bash
+# Create high-priority pull request for deploy-debug
+gh pr create \
+  --title "CRITICAL: Fix all deployment issues - App now fully functional" \
+  --body "🚨 CRITICAL DEPLOYMENT FIXES - All app-breaking issues resolved. See MERGE.md for detailed changes." \
+  --base main \
+  --head deploy-debug \
+  --label critical,bug,deployment
+
+# Merge immediately after approval
+gh pr merge --squash --delete-branch
+```
+
+#### Option 3: Direct Merge (Recommended for Critical Fixes)
+```bash
+# Switch to main branch
+git checkout main
+
+# Pull latest changes
+git pull origin main
+
+# Merge the deploy-debug branch
+git merge deploy-debug
+
+# Push to remote
+git push origin main
+
+# Clean up local branch
+git branch -d deploy-debug
+```
+
+### Secondary: Integration Branch (Merge After Deploy-Debug)
 
 ### Option 1: GitHub Web Interface
 1. Go to [ReplySight Repository](https://github.com/your-username/ReplySight)

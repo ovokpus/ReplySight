@@ -399,10 +399,8 @@ Score:"""
         """
         workflow = StateGraph(AgentState)
 
-        # Add nodes
+        # Add nodes (only functions that return state dictionaries)
         workflow.add_node("agent", self.call_model)
-        workflow.add_node("should_continue", self.should_continue)  # Decision diamond
-        workflow.add_node("action", self.route_action)  # Action router
         workflow.add_node("arxiv_tools", self.arxiv_node)
         workflow.add_node("tavily_tools", self.tavily_node)
         workflow.add_node("extract_arxiv", self.extract_arxiv_results)
@@ -419,27 +417,7 @@ Score:"""
             {
                 "arxiv_tools": "arxiv_tools",
                 "tavily_tools": "tavily_tools", 
-                "action": "action"
-            }
-        )
-        
-        # Action router determines next step
-        workflow.add_conditional_edges(
-            "action",
-            self.route_action,
-            {
-                "compose": "compose",
-                "agent": "should_continue"
-            }
-        )
-        
-        # DECISION GATE: Should we continue or end?
-        workflow.add_conditional_edges(
-            "should_continue",
-            self.should_continue,
-            {
-                "continue": "agent",
-                "end": END
+                "action": "compose"  # Route directly to compose when no tools needed
             }
         )
         
@@ -452,7 +430,14 @@ Score:"""
         workflow.add_edge("extract_tavily", "agent")
         
         # Compose leads to decision gate
-        workflow.add_edge("compose", "should_continue")
+        workflow.add_conditional_edges(
+            "compose",
+            self.should_continue,
+            {
+                "continue": "agent",
+                "end": END
+            }
+        )
 
         return workflow
 
