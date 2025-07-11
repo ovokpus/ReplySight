@@ -365,10 +365,12 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000  # Local development
 ```mermaid
 graph TD
     A[Customer Complaint Input] --> B[LLM Agent - LangGraph Orchestrator]
+    B --> I[LangSmith Tracing]
+    
     B --> C[ArXiv Research Tool]
     B --> D[Tavily Search Tool]
     B --> F[Response Composition Tool]
-    B --> I[LangSmith Tracing]
+    
     C --> E[Research Synthesis]
     D --> E
     E --> B
