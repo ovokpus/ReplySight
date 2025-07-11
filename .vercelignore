@@ -40,6 +40,11 @@ share/python-wheels/
 .nox/
 htmlcov/
 .nyc_output
+tests/
+test_*.py
+*_test.py
+pytest.ini
+evals/
 
 # IDE
 .vscode/
@@ -80,13 +85,6 @@ docs/
 *.md
 !README.md
 
-# Test files
-tests/
-test_*.py
-*_test.py
-pytest.ini
-.pytest_cache/
-
 # Artifacts (generated locally)
 artifacts/
 *.png
@@ -97,9 +95,12 @@ img/
 # UV lock file (too large)
 uv.lock
 
+# Python project config (using requirements.txt instead)
+pyproject.toml
+
 # Git
 .git/
 .gitignore
 
-# Evaluation files
-evals/ 
+# Cursor
+.cursor/ 

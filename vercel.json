@@ -6,7 +6,8 @@
   "functions": {
     "api/app.py": {
       "maxDuration": 60,
-      "memory": 2048
+      "memory": 2048,
+      "runtime": "python3.9"
     }
   },
   "rewrites": [
