@@ -26,8 +26,8 @@ python-dotenv==1.0.0
 # Type hints
 typing-extensions==4.8.0
 
-# Tavily API client
-tavily-python==0.2.0
+# Tavily API client (using available version)
+tavily-python==0.2.2
 
 # Additional dependencies for LangChain
 PyYAML>=5.3
