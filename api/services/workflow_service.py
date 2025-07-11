@@ -15,9 +15,9 @@ try:
     from ..models import ComplaintRequest, ResponseOutput
     from ..graph import create_replysight_graph
 except ImportError:
-    # Fall back to direct imports (when run directly)
-    from config import get_settings
-    from models import ComplaintRequest, ResponseOutput
+    # Fall back to direct imports (when Railway runs from api/ directory)
+    from config.settings import get_settings
+    from models.api_models import ComplaintRequest, ResponseOutput
     from graph import create_replysight_graph
 
 

@@ -25,7 +25,7 @@ try:
     # Try relative imports first (when imported as a module)
     from .tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
 except ImportError:
-    # Fall back to direct imports (when run directly)
+    # Fall back to direct imports (when Railway runs from api/ directory)
     from tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
 
 
