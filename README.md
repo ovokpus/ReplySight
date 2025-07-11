@@ -367,14 +367,17 @@ graph TD
     A[Customer Complaint Input] --> B[LLM Agent - LangGraph Orchestrator]
     B --> C[ArXiv Research Tool]
     B --> D[Tavily Search Tool]
-    C --> E[Research Synthesis]
-    E --> B
-    D --> E
     B --> F[Response Composition Tool]
+    B --> I[LangSmith Tracing]
+    C --> E[Research Synthesis]
+    D --> E
+    E --> B
+    
+    
     F --> G[Quality Assurance Check]
     G --> H[Empathetic Response Output]
     F --> I
-    B --> I[LangSmith Tracing]
+    
     I --> B
     I --> C
     I --> D
