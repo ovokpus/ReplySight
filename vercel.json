@@ -20,37 +20,13 @@
   ],
   "functions": {
     "api/respond.py": {
-      "runtime": "python3.9",
-      "environment": {
-        "OPENAI_API_KEY": "@openai_api_key",
-        "TAVILY_API_KEY": "@tavily_api_key",
-        "LANGCHAIN_TRACING_V2": "@langchain_tracing_v2",
-        "LANGCHAIN_ENDPOINT": "@langchain_endpoint",
-        "LANGCHAIN_API_KEY": "@langchain_api_key",
-        "LANGCHAIN_PROJECT": "@langchain_project"
-      }
+      "runtime": "python3.9"
     },
     "api/health.py": {
-      "runtime": "python3.9",
-      "environment": {
-        "OPENAI_API_KEY": "@openai_api_key",
-        "TAVILY_API_KEY": "@tavily_api_key",
-        "LANGCHAIN_TRACING_V2": "@langchain_tracing_v2",
-        "LANGCHAIN_ENDPOINT": "@langchain_endpoint",
-        "LANGCHAIN_API_KEY": "@langchain_api_key",
-        "LANGCHAIN_PROJECT": "@langchain_project"
-      }
+      "runtime": "python3.9"
     },
     "api/workflow/graph.py": {
-      "runtime": "python3.9",
-      "environment": {
-        "OPENAI_API_KEY": "@openai_api_key",
-        "TAVILY_API_KEY": "@tavily_api_key",
-        "LANGCHAIN_TRACING_V2": "@langchain_tracing_v2",
-        "LANGCHAIN_ENDPOINT": "@langchain_endpoint",
-        "LANGCHAIN_API_KEY": "@langchain_api_key",
-        "LANGCHAIN_PROJECT": "@langchain_project"
-      }
+      "runtime": "python3.9"
     }
   },
   "env": {
