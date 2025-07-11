@@ -374,7 +374,8 @@ graph TD
     F --> G[Quality Assurance Check]
     G --> H[Empathetic Response Output]
     
-    I[LangSmith Tracing] --> B
+    B --> I[LangSmith Tracing]
+    I --> B
     I --> C
     I --> D
     I --> F
