@@ -30,12 +30,6 @@
     }
   },
   "env": {
-    "OPENAI_API_KEY": "@openai_api_key",
-    "TAVILY_API_KEY": "@tavily_api_key",
-    "LANGCHAIN_TRACING_V2": "@langchain_tracing_v2",
-    "LANGCHAIN_ENDPOINT": "@langchain_endpoint",
-    "LANGCHAIN_API_KEY": "@langchain_api_key",
-    "LANGCHAIN_PROJECT": "@langchain_project",
     "API_BASE_URL": "https://replysight.vercel.app",
     "NODE_ENV": "production"
   },
