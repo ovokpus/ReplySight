@@ -18,7 +18,7 @@ def test_api_health():
     
     try:
         # Import the FastAPI app
-        from backend.api import app
+        from api.app import app
         print("✅ Backend API imported successfully")
         
         # Create a test client
@@ -66,11 +66,11 @@ def test_individual_components():
     
     try:
         # Test tools import
-        from backend.tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
+        from api.tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
         print("✅ Tools imported successfully")
         
         # Test graph import
-        from backend.graph import create_replysight_graph
+        from api.graph import create_replysight_graph
         print("✅ Graph module imported successfully")
         
         # Test graph creation (without API keys for now)

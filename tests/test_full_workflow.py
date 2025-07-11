@@ -11,14 +11,16 @@ This script tests the full end-to-end workflow including:
 import os
 import asyncio
 import sys
+import pytest
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
 sys.path.append('..')
-from backend.graph import create_replysight_graph
+from api.graph import create_replysight_graph
 
+@pytest.mark.asyncio
 async def test_workflow():
     """Test the complete workflow with a sample complaint."""
     print("🧪 Testing complete ReplySight workflow with OpenAI...")
@@ -105,6 +107,7 @@ async def test_workflow():
         print("• Check network connectivity")
         return False
 
+@pytest.mark.asyncio
 async def test_multiple_scenarios():
     """Test with different types of complaints."""
     scenarios = [

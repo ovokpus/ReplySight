@@ -5,13 +5,16 @@ This tests the OpenAI integration directly.
 
 import asyncio
 import os
+import pytest
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-from backend.api import respond_to_complaint, ComplaintRequest
+from api.app import respond_to_complaint
+from api.models import ComplaintRequest
 
+@pytest.mark.asyncio
 async def test_api_directly():
     """Test the API endpoint function directly."""
     print("🧪 Testing ReplySight API directly with OpenAI...")

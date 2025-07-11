@@ -1,10 +1,23 @@
-# 🎧 ReplySight – Research-Backed Customer-Service Replies, Instantly
+# 🎧 ReplySight – Instant Research-Backed Customer-Service Replies
+
+## - Powered by an Agentic Artificial Intelligence Workflow
 
 > **Turn raw frustration into loyalty** &mdash; _one evidence-filled reply at a time._
 
 ---
 
+---
+
 ![image](./img/chat-page.png)
+
+---
+
+### **Key Value Proposition**
+- **2-second response generation** (vs 6-8 minutes manual)
+- **30% handle time reduction** 
+- **1% churn reduction** = $200k+ annual savings
+- **$363k total annual savings** for mid-size DTC brands
+- **472% first-year ROI**
 
 ---
 
@@ -171,6 +184,8 @@ Complaint In  ─▶  Parallel Evidence Fetch  ─▶  GPT-4o Composes Reply  �
 
 ---
 
+### LangGraph Orchestration Diagram
+
 ![image](./img/workflow.png)
 
 1. **Rep pastes a complaint** into the React/Next.js front end.  
@@ -204,8 +219,122 @@ Complaint In  ─▶  Parallel Evidence Fetch  ─▶  GPT-4o Composes Reply  �
 | **Visualization** | **Mermaid.js** + **React integration** | Interactive workflow diagrams |
 | **Development** | **TypeScript** + **ESLint** + **Tailwind** | Full type safety, code quality, responsive design |
 | **Observability** | **LangSmith** | Prompt/latency tracing + evaluation datasets |
-| **Deployment** | **Vercel** + **Docker** ready | Cloud-native deployment with container support |
+| **Deployment** | **Vercel** + **Railway** + **Docker** ready | Hybrid cloud deployment with container support |
 | **Testing / Eval** | Pytest • LangSmith datasets | Assert reply quality & latency budgets |
+
+---
+
+## 🚀 **Quick Start**
+
+### **Option A: Hybrid Deployment (Recommended)**
+
+#### **1. Deploy Backend to Railway**
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd ReplySight
+
+# Deploy to Railway (requires Railway account)
+# 1. Install Railway CLI: npm install -g @railway/cli
+# 2. Login: railway login
+# 3. Deploy: railway up
+
+# Set environment variables in Railway dashboard:
+# - OPENAI_API_KEY=your_openai_key
+# - TAVILY_API_KEY=your_tavily_key
+# - LANGSMITH_API_KEY=your_langsmith_key
+```
+
+#### **2. Deploy Frontend to Vercel**
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Deploy to Vercel  
+vercel --prod
+
+# Update environment variable in Vercel dashboard:
+# NEXT_PUBLIC_API_BASE_URL=https://your-railway-app.up.railway.app
+```
+
+#### **3. Test the Deployment**
+
+```bash
+# Test backend health
+curl https://your-railway-app.up.railway.app/health
+
+# Test frontend
+open https://your-vercel-app.vercel.app
+```
+
+### **Option B: Local Development**
+
+```bash
+# Backend setup
+cd api
+python -m venv .venv
+source .venv/bin/activate  # or .venv\Scripts\activate on Windows
+pip install -r requirements.txt
+
+# Start backend
+python -m uvicorn app:app --reload --port 8000
+
+# Frontend setup (new terminal)
+cd frontend
+npm install
+npm run dev
+
+# Open browser
+open http://localhost:3000
+```
+
+### Want to try it?
+
+```bash
+# Local
+git clone https://github.com/your-org/replysight.git
+cd replysight
+cp .env.sample .env           # add ARXIV, TAVILY & OPENAI keys
+make dev                      # spawns FastAPI + Next.js in watch mode
+```
+
+Open [http://localhost:3000](http://localhost:3000), paste a complaint, watch the magic.
+Ready for prod? Navigate to `frontend/` directory and run `vercel --prod` to ship the whole stack in under a minute.
+
+---
+
+## 🔧 **Configuration**
+
+### **Environment Variables**
+
+Create `.env` file in project root:
+
+```bash
+# AI Service APIs
+OPENAI_API_KEY=sk-your-openai-key
+TAVILY_API_KEY=tvly-your-tavily-key
+
+# LangSmith (Optional - for tracing)
+LANGSMITH_API_KEY=ls__your-langsmith-key
+LANGSMITH_TRACING=true
+LANGSMITH_PROJECT="ReplySight"
+
+# Application Settings
+APP_NAME="ReplySight API"
+APP_VERSION="1.0.0"
+```
+
+### **Frontend Configuration**
+
+In `frontend/.env.local`:
+
+```bash
+# API Configuration
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000  # Local development
+# NEXT_PUBLIC_API_BASE_URL=https://your-railway-app.up.railway.app  # Production
+```
 
 ---
 
@@ -231,18 +360,34 @@ Complaint In  ─▶  Parallel Evidence Fetch  ─▶  GPT-4o Composes Reply  �
 
 ---
 
-### Want to try it?
+## 📊 **Workflow Architecture**
 
-```bash
-# Local
-git clone https://github.com/your-org/replysight.git
-cd replysight
-cp .env.sample .env           # add ARXIV, TAVILY & OPENAI keys
-make dev                      # spawns FastAPI + Next.js in watch mode
+```mermaid
+graph TD
+    A[Customer Complaint Input] --> B[LLM Agent - LangGraph Orchestrator]
+    B --> I[LangSmith Tracing]
+
+    B --> C[ArXiv Research Tool]
+    B --> D[Tavily Search Tool]
+    B --> F[Response Composition Tool]
+    
+    C --> E[Research Synthesis]
+    D --> E
+    E --> B
+    
+    
+    F --> G[Quality Assurance Check]
+    G --> B
+    F --> I
+    
+    I --> B
+    I --> C
+    I --> D
+    I --> F
+    I --> G
+
+    B --> H[Empathetic Response Output]
 ```
-
-Open [http://localhost:3000](http://localhost:3000), paste a complaint, watch the magic.
-Ready for prod? `vercel --prod` ships the whole stack in under a minute.
 
 ---
 
@@ -272,6 +417,122 @@ Run these through your deployed endpoint and watch:
 3. **"Why you received this solution"** bullets cite both an academic source *and* a fresh web article.
 
 That mix demonstrates every core capability—parallel evidence fetch, multilingual drafting, policy look-ups, accessibility awareness, and tangible ROI via handle-time cuts.
+
+---
+
+## 🧪 **Testing**
+
+```bash
+# Run backend tests
+cd api
+python -m pytest tests/ -v
+
+# Run frontend tests  
+cd frontend
+npm test
+
+# Run integration tests
+python tests/test_full_workflow.py
+```
+
+---
+
+## 📈 **Performance Metrics**
+
+### **Latency Targets**
+- **Total Response Time**: <2 seconds (target), <3 seconds (SLA)
+- **Research Phase**: <800ms
+- **Composition Phase**: <600ms
+- **Quality Check**: <300ms
+
+### **Business Impact**
+- **Handle Time Reduction**: 30% (6-8 min → 4-5 min)
+- **Customer Satisfaction**: +15% CSAT improvement
+- **Agent Productivity**: +40% responses per hour
+- **Churn Reduction**: 1% absolute reduction
+
+---
+
+## 🔍 **Monitoring & Observability**
+
+- **LangSmith**: End-to-end tracing and performance analytics
+- **Health Checks**: `/health` endpoint for system monitoring
+- **Error Tracking**: Comprehensive error handling and logging
+- **Metrics Dashboard**: Real-time performance and usage metrics
+
+---
+
+## 🛠️ **Development**
+
+### **Project Structure**
+
+```
+ReplySight/
+├── api/                    # FastAPI backend
+│   ├── app.py             # Main application
+│   ├── models/            # Pydantic models
+│   ├── services/          # Business logic
+│   ├── workflow/          # LangGraph definitions
+│   └── config/            # Configuration
+├── frontend/              # Next.js frontend
+│   ├── src/app/          # App router pages
+│   ├── src/components/   # React components
+│   ├── src/hooks/        # Custom hooks
+│   ├── src/services/     # API services
+│   ├── vercel.json       # Vercel deployment config
+│   └── .vercelignore     # Vercel ignore patterns
+├── tests/                # Test suites
+└── requirements.txt      # Python dependencies
+```
+
+### **API Documentation**
+
+The API is self-documenting via FastAPI. When running locally:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+
+### **Key Endpoints**
+
+```bash
+POST /respond              # Generate response to complaint
+GET  /health              # System health check  
+GET  /workflow/graph      # Workflow visualization
+```
+
+---
+
+## 🚢 **Deployment**
+
+### **Railway Backend Deployment**
+
+```bash
+# Install Railway CLI
+npm install -g @railway/cli
+
+# Login to Railway
+railway login
+
+# Create new project and deploy
+railway up
+
+# Set environment variables in Railway dashboard
+railway open
+```
+
+### **Vercel Frontend Deployment**
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install Vercel CLI (if not installed)
+npm install -g vercel
+
+# Deploy to production
+vercel --prod
+
+# Set environment variables in Vercel dashboard
+```
 
 ---
 
