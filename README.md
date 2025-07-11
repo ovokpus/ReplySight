@@ -371,7 +371,7 @@ graph TD
     E --> B
     D --> E
     B --> F[Response Composition Tool]
-    F --> G[Quality Assurance Check]
+    G[Quality Assurance Check] --> F
     G --> H[Empathetic Response Output]
     
     B --> I[LangSmith Tracing]
