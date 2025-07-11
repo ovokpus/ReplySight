@@ -366,7 +366,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000  # Local development
 graph TD
     A[Customer Complaint Input] --> B[LLM Agent - LangGraph Orchestrator]
     B --> I[LangSmith Tracing]
-    
+
     B --> C[ArXiv Research Tool]
     B --> D[Tavily Search Tool]
     B --> F[Response Composition Tool]
@@ -377,7 +377,7 @@ graph TD
     
     
     F --> G[Quality Assurance Check]
-    G --> H[Empathetic Response Output]
+    G --> B
     F --> I
     
     I --> B
@@ -385,6 +385,8 @@ graph TD
     I --> D
     I --> F
     I --> G
+
+    B --> H[Empathetic Response Output]
 ```
 
 ---
