@@ -1,20 +1,14 @@
 {
-    "functions": {
-        "api/api.py": {
-            "runtime": "python3.9"
-        }
-    },
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "api/api.py"
-        },
-        {
-            "handle": "filesystem"
-        }
-    ],
-    "env": {
-        "LANGCHAIN_TRACING_V2": "true",
-        "LANGCHAIN_ENDPOINT": "https://api.smith.langchain.com"
-    }
+  "version": 2,
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/.next",
+  "installCommand": "cd frontend && npm install",
+  "devCommand": "cd frontend && npm run dev",
+  "framework": "nextjs",
+  "env": {
+    "API_BASE_URL": "https://replysight.vercel.app",
+    "LANGCHAIN_TRACING_V2": "true",
+    "LANGCHAIN_ENDPOINT": "https://api.smith.langchain.com",
+    "NODE_ENV": "production"
+  }
 }
