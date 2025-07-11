@@ -18,11 +18,7 @@
       "destination": "/frontend/$1"
     }
   ],
-  "functions": {
-    "api/respond.py": {},
-    "api/health.py": {},
-    "api/workflow/graph.py": {}
-  },
+
   "env": {
     "API_BASE_URL": "https://replysight.vercel.app",
     "NODE_ENV": "production"
