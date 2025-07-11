@@ -14,7 +14,7 @@ export interface UseGraphDataReturn {
   setError: (error: string | null) => void;
 }
 
-export const useGraphData = (apiUrl: string = API_ENDPOINTS.WORKFLOW_GRAPH): UseGraphDataReturn => {
+export const useGraphData = (apiUrl: string = API_ENDPOINTS.workflowGraph): UseGraphDataReturn => {
   const [graphData, setGraphData] = useState<GraphData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
