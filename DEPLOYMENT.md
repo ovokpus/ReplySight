@@ -134,22 +134,42 @@ curl -X POST https://your-app.vercel.app/api/respond \
 
 ```
 ReplySight/
-├── api/                    # Vercel serverless functions
-│   ├── respond.py         # Main complaint processing
-│   ├── health.py          # Health monitoring
-│   └── workflow/
-│       └── graph.py       # Workflow visualization
-├── backend/               # Business logic library
-│   ├── services/          # Core services
-│   ├── models/           # Data models
-│   └── config/           # Configuration
-├── frontend/             # Next.js application
-│   ├── app/              # App router
-│   ├── components/       # React components
-│   └── services/         # API services
-├── vercel.json           # Vercel configuration
-├── requirements.txt # Python dependencies
-└── .vercelignore         # Deployment exclusions
+├── api/                    # Unified API directory (serverless + business logic)
+│   ├── respond.py         # Main complaint processing function
+│   ├── health.py          # Health monitoring function
+│   ├── app.py             # FastAPI application (for local dev)
+│   ├── server.py          # Local development server
+│   ├── graph.py           # LangGraph workflow orchestration
+│   ├── tools.py           # LangChain research tools
+│   ├── workflow/          # Workflow serverless functions
+│   │   └── graph.py       # Graph visualization endpoint
+│   ├── config/            # Configuration management
+│   │   ├── __init__.py
+│   │   └── settings.py    # Centralized settings
+│   ├── models/            # Data models
+│   │   ├── __init__.py
+│   │   ├── api_models.py  # Request/response models
+│   │   └── workflow_models.py # Internal workflow models
+│   ├── services/          # Core business logic
+│   │   ├── __init__.py
+│   │   ├── workflow_service.py # Workflow orchestration
+│   │   └── graph_service.py    # Graph operations
+│   └── utils/             # Utility functions
+│       ├── __init__.py
+│       ├── error_handlers.py
+│       └── validation_utils.py
+├── frontend/              # Next.js application
+│   ├── src/app/          # App router
+│   ├── src/components/   # React components
+│   ├── src/hooks/        # Custom hooks
+│   ├── src/services/     # API services
+│   ├── src/types/        # TypeScript definitions
+│   └── src/constants/    # Constants
+├── tests/                # Comprehensive test suites
+├── vercel.json           # Vercel deployment configuration
+├── requirements.txt      # Python dependencies for all environments
+├── .vercelignore         # Files to exclude from deployment
+└── .env.development      # Environment template
 ```
 
 ## Troubleshooting
@@ -269,4 +289,27 @@ The application is now fully configured for Vercel deployment with:
 - Optimized build configuration
 - Proper environment variable handling
 - Frontend and backend integration
-- Comprehensive error handling and CORS support 
+- Comprehensive error handling and CORS support
+
+---
+
+## 🔗 **Related Documentation**
+
+- **[Main Project README](README.md)** - Project overview, quick start, and demo scenarios
+- **[API Documentation](api/README.md)** - FastAPI server, LangGraph workflows, and deployment guide
+- **[Frontend Documentation](frontend/README.md)** - Next.js interface, components, and user experience
+- **[Development Guide](DEVELOPMENT.md)** - Local development setup and project structure
+- **[Merge Instructions](MERGE.md)** - Current branch status and merge procedures
+- **[Test Suite Guide](tests/README.md)** - Testing documentation and test scenarios
+- **[License](LICENSE)** - MIT License details
+
+### **External Resources**
+- **[GitHub Repository](https://github.com/ovokpus/ReplySight)** - Source code and issues
+- **[Vercel Documentation](https://vercel.com/docs)** - Deployment platform documentation
+- **[Vercel CLI](https://vercel.com/cli)** - Command-line interface for deployment
+- **[Railway Documentation](https://docs.railway.app/)** - Alternative deployment platform
+- **[FastAPI Deployment](https://fastapi.tiangolo.com/deployment/)** - FastAPI deployment best practices
+
+---
+
+**Deployment Ready**: ✅ All systems configured for production deployment to Vercel with full-stack integration. 

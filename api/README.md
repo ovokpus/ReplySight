@@ -51,21 +51,7 @@ The ReplySight API backend is an AI-powered customer service response generation
 ### **Intelligent Agent-Based Workflow**
 ReplySight uses a **LangGraph agent workflow** with separate tool nodes for optimal performance:
 
-```mermaid
-graph TD
-    A[START] --> B[Agent Analyzes Complaint]
-    B --> C{Decision Gate}
-    C -->|Need Research| D[Parallel Tool Execution]
-    C -->|Has Enough Info| H[Compose Response]
-    D --> E[ArXiv Research Tool]
-    D --> F[Tavily Examples Tool]
-    E --> G[Extract Research Results]
-    F --> G
-    G --> B
-    H --> I[Helpfulness Check]
-    I -->|Score < 0.7| B
-    I -->|Score ≥ 0.7| J[END]
-```
+![image](../img/workflow.png)
 
 ### **Core Components**
 
@@ -225,30 +211,49 @@ class Settings:
 
 ### **Local Development**
 ```bash
-# Install dependencies
+# Install dependencies (from project root)
 pip install -r requirements.txt
 
-# Set environment variables
-cp .env_sample .env
-# Edit .env with your API keys
+# Set environment variables  
+cp .env.development .env.local
+# Edit .env.local with your actual API keys:
+# - OPENAI_API_KEY=sk-proj-...
+# - TAVILY_API_KEY=tvly-...
+# - LANGCHAIN_API_KEY=lsv2_... (optional)
 
-# Run FastAPI development server
+# Run local development server
 cd api
-python app.py
+python server.py
 
 # Server runs on http://localhost:8000
 # API docs at http://localhost:8000/docs
+# ReDoc at http://localhost:8000/redoc
+```
+
+### **Alternative: FastAPI Development Mode**
+```bash
+# For advanced debugging with uvicorn
+cd api
+python -m uvicorn app:app --reload --port 8000
 ```
 
 ### **Testing**
 ```bash
-# Run all tests
-python -m pytest tests/
+# Run all tests (from project root)
+python -m pytest tests/ -v
 
 # Run specific test categories
 python -m pytest tests/test_api_direct.py
 python -m pytest tests/test_full_workflow.py
 python -m pytest tests/test_openai_integration.py
+
+# Test API health
+curl http://localhost:8000/health
+
+# Test response generation
+curl -X POST http://localhost:8000/respond \
+  -H "Content-Type: application/json" \
+  -d '{"complaint": "Test complaint", "customer_id": "test"}'
 ```
 
 ## 📊 **Monitoring & Observability**
@@ -359,6 +364,24 @@ echo $TAVILY_API_KEY
 - **Development Guide**: `../DEVELOPMENT.md`
 - **LangSmith Dashboard**: [Your LangSmith Project URL]
 - **Mermaid Visualization**: https://mermaid.live
+
+---
+
+## 🔗 **Related Documentation**
+
+- **[Main Project README](../README.md)** - Project overview, quick start, and demo scenarios
+- **[Frontend Documentation](../frontend/README.md)** - Next.js interface, components, and user experience
+- **[Development Guide](../DEVELOPMENT.md)** - Local development setup and project structure
+- **[Deployment Guide](../DEPLOYMENT.md)** - Production deployment and infrastructure
+- **[Test Suite Guide](../tests/README.md)** - Testing documentation and test scenarios
+- **[License](../LICENSE)** - MIT License details
+
+### **External Resources**
+- **[GitHub Repository](https://github.com/ovokpus/ReplySight)** - Source code and issues
+- **[LangSmith Dashboard](https://smith.langchain.com)** - AI workflow monitoring and tracing
+- **[Mermaid Live Editor](https://mermaid.live)** - Workflow diagram visualization
+- **[OpenAI API Documentation](https://platform.openai.com/docs)** - LLM integration details
+- **[Tavily API Documentation](https://tavily.com/docs)** - Web research tool integration
 
 ---
 
