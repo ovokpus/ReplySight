@@ -6,8 +6,6 @@
 
 ---
 
----
-
 ![image](./img/chat-page.png)
 
 ---
@@ -31,6 +29,39 @@ Yet the answers already live in two places:
 
 **ReplySight** fuses those streams, drafts a personalized, citation-rich response, and hands the rep a ready-to-send message in **≈ 2 seconds**.  
 The result: **30% lower handle-time** and a **1% churn drop**, worth roughly **$286k per year** for a 120k-order DTC gadget shop.
+
+---
+
+---
+
+## 📊 **Workflow Architecture**
+
+```mermaid
+graph TD
+    A[Customer Complaint Input] --> B[LLM Agent - LangGraph Orchestrator]
+    B --> I[LangSmith Tracing]
+
+    B --> C[ArXiv Research Tool]
+    B --> D[Tavily Search Tool]
+    B --> F[Response Composition Tool]
+    
+    C --> E[Research Synthesis]
+    D --> E
+    E --> B
+    
+    F --> G[Quality Assurance Check]
+    G --> B
+    F --> I
+    
+    I --> B
+    I --> C
+    I --> D
+    I --> F
+    I --> G
+
+    F --> H[Empathetic Response Output]
+    B --> H
+```
 
 ---
 
@@ -272,16 +303,25 @@ open https://your-vercel-app.vercel.app
 ### **Option B: Local Development**
 
 ```bash
+# Clone repository
+git clone https://github.com/ovokpus/ReplySight.git
+cd ReplySight
+
 # Backend setup
-cd api
-python -m venv .venv
-source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 pip install -r requirements.txt
 
-# Start backend
-python -m uvicorn app:app --reload --port 8000
+# Copy environment template and add your API keys
+cp .env.development .env.local
+# Edit .env.local with your actual API keys:
+# - OPENAI_API_KEY
+# - TAVILY_API_KEY  
+# - LANGCHAIN_API_KEY (optional)
 
-# Frontend setup (new terminal)
+# Start backend (Terminal 1)
+cd api
+python server.py
+
+# Start frontend (Terminal 2)
 cd frontend
 npm install
 npm run dev
@@ -293,11 +333,12 @@ open http://localhost:3000
 ### Want to try it?
 
 ```bash
-# Local
-git clone https://github.com/your-org/replysight.git
-cd replysight
-cp .env.sample .env           # add ARXIV, TAVILY & OPENAI keys
-make dev                      # spawns FastAPI + Next.js in watch mode
+# Local development
+git clone https://github.com/ovokpus/ReplySight.git
+cd ReplySight
+cp .env.development .env.local     # add your API keys here
+# Terminal 1: cd api && python server.py
+# Terminal 2: cd frontend && npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000), paste a complaint, watch the magic.
@@ -309,21 +350,21 @@ Ready for prod? Navigate to `frontend/` directory and run `vercel --prod` to shi
 
 ### **Environment Variables**
 
-Create `.env` file in project root:
+Create `.env.local` file in project root (copy from `.env.development` template):
 
 ```bash
 # AI Service APIs
 OPENAI_API_KEY=sk-your-openai-key
 TAVILY_API_KEY=tvly-your-tavily-key
 
-# LangSmith (Optional - for tracing)
-LANGSMITH_API_KEY=ls__your-langsmith-key
-LANGSMITH_TRACING=true
-LANGSMITH_PROJECT="ReplySight"
+# LangSmith (Optional - for tracing)  
+LANGCHAIN_API_KEY=lsv2_your-langsmith-key
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_PROJECT=ReplySight
 
 # Application Settings
-APP_NAME="ReplySight API"
-APP_VERSION="1.0.0"
+REPLYSIGHT_APP_NAME=ReplySight API
+REPLYSIGHT_APP_VERSION=1.0.0
 ```
 
 ### **Frontend Configuration**
@@ -332,8 +373,8 @@ In `frontend/.env.local`:
 
 ```bash
 # API Configuration
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000  # Local development
-# NEXT_PUBLIC_API_BASE_URL=https://your-railway-app.up.railway.app  # Production
+API_BASE_URL=http://localhost:8000  # Local development
+# API_BASE_URL=https://your-app.vercel.app  # Production
 ```
 
 ---
@@ -342,8 +383,10 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000  # Local development
 
 ### **Quick Start & Architecture**
 - **[Frontend Documentation](frontend/README.md)** - Complete guide to the Next.js interface, components, and API integration
-- **[Backend Documentation](backend/README.md)** - FastAPI server, LangGraph workflows, and deployment guide
-- **[Deployment Guide](MERGE.md)** - Branch management, deployment fixes, and production setup
+- **[API Documentation](api/README.md)** - FastAPI server, LangGraph workflows, and deployment guide
+- **[Development Guide](DEVELOPMENT.md)** - Local development setup with unified API structure
+- **[Deployment Guide](DEPLOYMENT.md)** - Vercel deployment with serverless functions
+- **[Test Suite Guide](tests/README.md)** - Comprehensive testing documentation and test scenarios
 
 ### **Key Features**
 - **✅ Professional UI**: Clean, responsive interface with proper Markdown formatting
@@ -357,37 +400,6 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000  # Local development
 - **🔧 Deployment Resolved**: All connection issues, port mismatches, and build errors resolved
 - **📱 UI Enhanced**: Professional typography with @tailwindcss/typography plugin
 - **🚀 Performance Optimized**: 14-20s response times with full citation tracking
-
----
-
-## 📊 **Workflow Architecture**
-
-```mermaid
-graph TD
-    A[Customer Complaint Input] --> B[LLM Agent - LangGraph Orchestrator]
-    B --> I[LangSmith Tracing]
-
-    B --> C[ArXiv Research Tool]
-    B --> D[Tavily Search Tool]
-    B --> F[Response Composition Tool]
-    
-    C --> E[Research Synthesis]
-    D --> E
-    E --> B
-    
-    
-    F --> G[Quality Assurance Check]
-    G --> B
-    F --> I
-    
-    I --> B
-    I --> C
-    I --> D
-    I --> F
-    I --> G
-
-    B --> H[Empathetic Response Output]
-```
 
 ---
 
@@ -424,7 +436,6 @@ That mix demonstrates every core capability—parallel evidence fetch, multiling
 
 ```bash
 # Run backend tests
-cd api
 python -m pytest tests/ -v
 
 # Run frontend tests  
@@ -468,20 +479,26 @@ python tests/test_full_workflow.py
 
 ```
 ReplySight/
-├── api/                    # FastAPI backend
-│   ├── app.py             # Main application
+├── api/                    # Unified API directory (local dev + serverless)
+│   ├── app.py             # FastAPI application (for local development)
+│   ├── server.py          # Local development server
+│   ├── respond.py         # Vercel serverless function
+│   ├── health.py          # Health check serverless function
+│   ├── graph.py           # LangGraph workflow
+│   ├── tools.py           # LangChain tools
+│   ├── config/            # Configuration management
 │   ├── models/            # Pydantic models
 │   ├── services/          # Business logic
-│   ├── workflow/          # LangGraph definitions
-│   └── config/            # Configuration
+│   ├── utils/             # Utility functions
+│   └── workflow/          # Workflow serverless functions
 ├── frontend/              # Next.js frontend
-│   ├── src/app/          # App router pages
+│   ├── src/app/          # App router pages  
 │   ├── src/components/   # React components
 │   ├── src/hooks/        # Custom hooks
 │   ├── src/services/     # API services
-│   ├── vercel.json       # Vercel deployment config
-│   └── .vercelignore     # Vercel ignore patterns
-├── tests/                # Test suites
+│   └── src/types/        # TypeScript definitions
+├── tests/                # Comprehensive test suites
+├── .env.development      # Environment template
 └── requirements.txt      # Python dependencies
 ```
 
@@ -532,6 +549,20 @@ npm install -g vercel
 vercel --prod
 
 # Set environment variables in Vercel dashboard
+```
+
+### **Vercel Full-Stack Deployment**
+
+The application is optimized for Vercel deployment with both frontend and backend:
+
+```bash
+# Deploy entire application to Vercel
+vercel --prod
+
+# The deployment includes:
+# - Frontend: Static Next.js site
+# - Backend: Serverless functions in /api/ directory
+# - API endpoints at /api/respond, /api/health, /api/workflow/graph
 ```
 
 ---

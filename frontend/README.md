@@ -373,10 +373,16 @@ This project is licensed under the MIT License. See the [LICENSE](../LICENSE) fi
 
 ## 🔗 Links
 
-- **Backend Documentation**: [backend/README.md](../backend/README.md)
-- **Main Project**: [README.md](../README.md)
-- **GitHub Repository**: [ReplySight](https://github.com/ovokpus/ReplySight)
-- **Live Demo**: [Coming Soon]
+- **[Main Project README](../README.md)** - Project overview, quick start, and demo scenarios
+- **[API Documentation](../api/README.md)** - FastAPI server, LangGraph workflows, and deployment guide
+- **[Development Guide](../DEVELOPMENT.md)** - Local development setup and project structure
+- **[Deployment Guide](../DEPLOYMENT.md)** - Production deployment and infrastructure
+- **[Test Suite Guide](../tests/README.md)** - Comprehensive testing documentation and test scenarios
+- **[License](../LICENSE)** - MIT License details
+
+### **External Resources**
+- **[GitHub Repository](https://github.com/ovokpus/ReplySight)** - Source code and issues
+- **[Live Demo](https://replysight.vercel.app)** - Production application (coming soon)
 
 ## 📞 Support
 
