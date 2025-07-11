@@ -6,7 +6,18 @@
 
 ---
 
+---
+
 ![image](./img/chat-page.png)
+
+---
+
+### **Key Value Proposition**
+- **2-second response generation** (vs 6-8 minutes manual)
+- **30% handle time reduction** 
+- **1% churn reduction** = $200k+ annual savings
+- **$363k total annual savings** for mid-size DTC brands
+- **472% first-year ROI**
 
 ---
 
