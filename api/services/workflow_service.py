@@ -9,9 +9,16 @@ import time
 from typing import Dict, Any, Optional
 from langsmith import traceable
 
-from backend.config import get_settings
-from backend.models import ComplaintRequest, ResponseOutput
-from backend.graph import create_replysight_graph
+try:
+    # Try relative imports first (when imported as a module)
+    from ..config import get_settings
+    from ..models import ComplaintRequest, ResponseOutput
+    from ..graph import create_replysight_graph
+except ImportError:
+    # Fall back to direct imports (when run directly)
+    from config import get_settings
+    from models import ComplaintRequest, ResponseOutput
+    from graph import create_replysight_graph
 
 
 class WorkflowService:

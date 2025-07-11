@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-from backend.tools import ResponseComposerTool
+from api.tools import ResponseComposerTool
 
 
 class TestOpenAIIntegration:
@@ -37,7 +37,7 @@ class TestOpenAIIntegration:
             # This is expected without a real API key
             assert "api_key" in str(e).lower() or "openai" in str(e).lower() or "authorization" in str(e).lower()
 
-    @patch('backend.tools.ChatOpenAI')
+    @patch('api.tools.ChatOpenAI')
     def test_response_generation_with_mock(self, mock_chat_openai):
         """Test response generation with mocked OpenAI calls."""
         # Mock the OpenAI response

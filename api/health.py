@@ -7,8 +7,8 @@ backend services for system health monitoring.
 
 from typing import Dict, Any
 import json
-from backend.services import WorkflowService
-from backend.config import get_settings
+from services import WorkflowService
+from config import get_settings
 
 
 def handler(request):

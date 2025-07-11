@@ -21,7 +21,12 @@ from pydantic import BaseModel
 from typing_extensions import TypedDict, Annotated
 import operator
 
-from backend.tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
+try:
+    # Try relative imports first (when imported as a module)
+    from .tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
+except ImportError:
+    # Fall back to direct imports (when run directly)
+    from tools import ArxivInsightsTool, TavilyExamplesTool, ResponseComposerTool
 
 
 class AgentState(TypedDict):

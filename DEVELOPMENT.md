@@ -19,7 +19,7 @@ ReplySight/
 │   │   ├── services/      # Core services
 │   │   ├── models/        # Data models
 │   │   ├── config/        # Configuration
-│   │   └── api.py         # FastAPI application
+│   │   └── app.py         # FastAPI application
 │   └── server.py          # Local development server
 ├── frontend/              # Next.js frontend
 └── .env.development       # Local development environment
@@ -98,7 +98,7 @@ npm run dev:full
 ## Key Files
 
 - `api/server.py` - Local development server
-- `api/backend/api.py` - FastAPI application
+- `api/app.py` - FastAPI application
 - `frontend/services/api.ts` - Frontend API client
 - `.env.development` - Development environment template
 

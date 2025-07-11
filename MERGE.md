@@ -93,7 +93,7 @@ The `deploy-debug` branch contains critical fixes for application-breaking issue
 ```
 backend/
 ├── __init__.py              # Package exports
-├── api.py                   # Streamlined FastAPI app
+├── app.py                   # Streamlined FastAPI app
 ├── config/
 │   ├── __init__.py
 │   └── settings.py          # Centralized configuration

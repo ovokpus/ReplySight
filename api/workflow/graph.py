@@ -7,8 +7,8 @@ backend GraphService for workflow diagram generation.
 
 from typing import Dict, Any
 import json
-from backend.services import GraphService
-from backend.config import get_settings
+from ..services import GraphService
+from ..config import get_settings
 
 
 def handler(request):

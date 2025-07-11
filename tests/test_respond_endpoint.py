@@ -18,7 +18,7 @@ def test_respond_endpoint():
     
     try:
         # Import the FastAPI app
-        from backend.api import app
+        from api.app import app
         
         # Create a test client
         client = TestClient(app)

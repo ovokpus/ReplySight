@@ -4,7 +4,7 @@
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/.next",
   "functions": {
-    "api/app.py": {
+    "api/server.py": {
       "maxDuration": 60,
       "memory": 2048
     }

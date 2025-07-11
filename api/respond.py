@@ -7,9 +7,9 @@ backend WorkflowService for complaint processing.
 
 from typing import Dict, Any
 import json
-from backend.services import WorkflowService
-from backend.models import ComplaintRequest, ResponseOutput
-from backend.config import get_settings
+from services import WorkflowService
+from models import ComplaintRequest, ResponseOutput
+from config import get_settings
 
 
 def handler(request):

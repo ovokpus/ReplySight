@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """
-Local development server for ReplySight API.
-Runs the FastAPI application with uvicorn for local development.
+Local development server for the ReplySight API.
+
+This script runs the FastAPI application locally for development and testing.
 """
 
 import uvicorn
-from backend.api import app
 
 if __name__ == "__main__":
-    print("Starting ReplySight API server...")
-    print("API will be available at: http://localhost:8000")
-    print("Health check: http://localhost:8000/health")
-    print("API docs: http://localhost:8000/docs")
+    # Import and run the FastAPI app
+    try:
+        from app import app  # Import from api/app.py
+    except ImportError:
+        # Fallback if the structure is different
+        from api.app import app
     
     uvicorn.run(
         app,
