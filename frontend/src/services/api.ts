@@ -6,14 +6,9 @@ export interface ComplaintRequest {
 }
 
 export interface ResponseOutput {
-  response: string;
+  reply: string;
+  citations: string[];
   latency_ms: number;
-  status: string;
-  citations?: Array<{
-    title: string;
-    url: string;
-    source: string;
-  }>;
 }
 
 export interface WorkflowGraphResponse {
@@ -104,7 +99,11 @@ class ApiService {
 
 export const apiService = new ApiService();
 
-// Standalone function for useGraphData hook
+// Standalone functions for hooks that expect them
+export const generateResponse = async (complaint: string): Promise<ResponseOutput> => {
+  return apiService.generateResponse(complaint);
+};
+
 export const fetchGraphData = async (): Promise<WorkflowGraphResponse> => {
   return apiService.getWorkflowGraph();
 }; 

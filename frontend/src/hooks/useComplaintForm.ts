@@ -1,12 +1,11 @@
 import { useState, useCallback } from 'react';
-import { ApiResponse } from '@/types';
-import { generateResponse } from '@/services/api';
+import { generateResponse, ResponseOutput } from '@/services/api';
 import { APP_CONFIG } from '@/constants';
 
 export interface UseComplaintFormReturn {
   // State
   complaint: string;
-  response: ApiResponse | null;
+  response: ResponseOutput | null;
   loading: boolean;
   error: string;
   
@@ -18,7 +17,7 @@ export interface UseComplaintFormReturn {
 
 export const useComplaintForm = (): UseComplaintFormReturn => {
   const [complaint, setComplaint] = useState('');
-  const [response, setResponse] = useState<ApiResponse | null>(null);
+  const [response, setResponse] = useState<ResponseOutput | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
