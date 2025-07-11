@@ -1,14 +1,89 @@
 {
   "version": 2,
-  "buildCommand": "cd frontend && npm run build",
-  "outputDirectory": "frontend/.next",
-  "installCommand": "cd frontend && npm install",
-  "devCommand": "cd frontend && npm run dev",
-  "framework": "nextjs",
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "api/*.py",
+      "use": "@vercel/python",
+      "config": {
+        "pythonPath": "python3.9"
+      }
+    },
+    {
+      "src": "api/workflow/*.py",
+      "use": "@vercel/python",
+      "config": {
+        "pythonPath": "python3.9"
+      }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/respond",
+      "destination": "/api/respond.py"
+    },
+    {
+      "source": "/api/health",
+      "destination": "/api/health.py"
+    },
+    {
+      "source": "/api/workflow/graph",
+      "destination": "/api/workflow/graph.py"
+    },
+    {
+      "source": "/((?!api).*)",
+      "destination": "/frontend/$1"
+    }
+  ],
+  "functions": {
+    "api/respond.py": {
+      "runtime": "python3.9",
+      "environment": {
+        "OPENAI_API_KEY": "@openai_api_key",
+        "TAVILY_API_KEY": "@tavily_api_key",
+        "LANGCHAIN_TRACING_V2": "@langchain_tracing_v2",
+        "LANGCHAIN_ENDPOINT": "@langchain_endpoint",
+        "LANGCHAIN_API_KEY": "@langchain_api_key",
+        "LANGCHAIN_PROJECT": "@langchain_project"
+      }
+    },
+    "api/health.py": {
+      "runtime": "python3.9",
+      "environment": {
+        "OPENAI_API_KEY": "@openai_api_key",
+        "TAVILY_API_KEY": "@tavily_api_key",
+        "LANGCHAIN_TRACING_V2": "@langchain_tracing_v2",
+        "LANGCHAIN_ENDPOINT": "@langchain_endpoint",
+        "LANGCHAIN_API_KEY": "@langchain_api_key",
+        "LANGCHAIN_PROJECT": "@langchain_project"
+      }
+    },
+    "api/workflow/graph.py": {
+      "runtime": "python3.9",
+      "environment": {
+        "OPENAI_API_KEY": "@openai_api_key",
+        "TAVILY_API_KEY": "@tavily_api_key",
+        "LANGCHAIN_TRACING_V2": "@langchain_tracing_v2",
+        "LANGCHAIN_ENDPOINT": "@langchain_endpoint",
+        "LANGCHAIN_API_KEY": "@langchain_api_key",
+        "LANGCHAIN_PROJECT": "@langchain_project"
+      }
+    }
+  },
   "env": {
+    "OPENAI_API_KEY": "@openai_api_key",
+    "TAVILY_API_KEY": "@tavily_api_key",
+    "LANGCHAIN_TRACING_V2": "@langchain_tracing_v2",
+    "LANGCHAIN_ENDPOINT": "@langchain_endpoint",
+    "LANGCHAIN_API_KEY": "@langchain_api_key",
+    "LANGCHAIN_PROJECT": "@langchain_project",
     "API_BASE_URL": "https://replysight.vercel.app",
-    "LANGCHAIN_TRACING_V2": "true",
-    "LANGCHAIN_ENDPOINT": "https://api.smith.langchain.com",
     "NODE_ENV": "production"
-  }
+  },
+  "regions": ["iad1"],
+  "outputDirectory": "frontend/.next",
+  "installCommand": "cd frontend && npm install"
 }

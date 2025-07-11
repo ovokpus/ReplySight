@@ -1,16 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:8000',
+    // For Vercel deployment, API routes are handled by serverless functions
+    // No need for hardcoded localhost URL
+    API_BASE_URL: process.env.API_BASE_URL || '',
   },
-  async rewrites() {
-    return [
-      {
-        source: '/api/respond',
-        destination: '/api/respond',
-      },
-    ]
-  },
+  // Remove rewrites since Vercel handles API routing automatically
+  // The /api routes will be handled by our serverless functions
 }
 
 module.exports = nextConfig 

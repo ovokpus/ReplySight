@@ -6,7 +6,8 @@ class ApiService {
   private baseUrl: string;
 
   constructor(baseUrl: string = '') {
-    this.baseUrl = baseUrl;
+    // Use environment variable or default to current origin for Vercel deployment
+    this.baseUrl = baseUrl || process.env.NEXT_PUBLIC_API_BASE_URL || '';
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {
