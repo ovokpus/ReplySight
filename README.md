@@ -195,14 +195,39 @@ Complaint In  ─▶  Parallel Evidence Fetch  ─▶  GPT-4o Composes Reply  �
 
 | Layer | Tech | Why it's here |
 |-------|------|---------------|
+| **Frontend** | **Next.js 14** + **React 18** + **TypeScript** | Modern React with App Router, full type safety |
+| **UI/Styling** | **Tailwind CSS** + **@tailwindcss/typography** | Responsive design, proper Markdown rendering |
 | **Orchestration** | **LangGraph** (on top of LangChain) | Simple DAG with parallel nodes → low latency |
 | **LLM** | **OpenAI GPT-4o** via LangChain `ChatOpenAI` | Best reasoning + 4o speed for real-time drafts |
 | **Evidence sources** | arXiv API • Tavily Search API (free tiers) | Zero licensing cost, always-fresh data |
-| **Backend** | **FastAPI** | Lightweight, async, Vercel-ready |
-| **Frontend** | **Next.js 14 + React 18 (TypeScript)** | SSR + API routes on the same Vercel deploy |
+| **Backend** | **FastAPI** + **Python 3.11** | High-performance API with async support |
+| **Visualization** | **Mermaid.js** + **React integration** | Interactive workflow diagrams |
+| **Development** | **TypeScript** + **ESLint** + **Tailwind** | Full type safety, code quality, responsive design |
 | **Observability** | **LangSmith** | Prompt/latency tracing + evaluation datasets |
-| **Deployment** | **Vercel (Fluid Compute Python)** | One-command CI/CD for both API & SPA |
+| **Deployment** | **Vercel** + **Docker** ready | Cloud-native deployment with container support |
 | **Testing / Eval** | Pytest • LangSmith datasets | Assert reply quality & latency budgets |
+
+---
+
+## 📚 Documentation
+
+### **Quick Start & Architecture**
+- **[Frontend Documentation](frontend/README.md)** - Complete guide to the Next.js interface, components, and API integration
+- **[Backend Documentation](backend/README.md)** - FastAPI server, LangGraph workflows, and deployment guide
+- **[Deployment Guide](MERGE.md)** - Branch management, deployment fixes, and production setup
+
+### **Key Features**
+- **✅ Professional UI**: Clean, responsive interface with proper Markdown formatting
+- **✅ Real-time Processing**: Sub-20s response generation with latency tracking
+- **✅ Research Citations**: Academic references from arXiv with clickable links
+- **✅ Workflow Visualization**: Interactive Mermaid diagrams of AI decision flow
+- **✅ Production Ready**: Full TypeScript, error handling, and monitoring
+
+### **Recent Updates**
+- **🎉 Formatting Fixed**: Customer service responses now display with proper paragraph spacing and bullet lists
+- **🔧 Deployment Resolved**: All connection issues, port mismatches, and build errors resolved
+- **📱 UI Enhanced**: Professional typography with @tailwindcss/typography plugin
+- **🚀 Performance Optimized**: 14-20s response times with full citation tracking
 
 ---
 
