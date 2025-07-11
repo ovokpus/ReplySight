@@ -9,16 +9,12 @@ import time
 from typing import Dict, Any, Optional
 from langsmith import traceable
 
-try:
-    # Try relative imports first (when imported as a module)
-    from ..config import get_settings
-    from ..models import ComplaintRequest, ResponseOutput
-    from ..graph import create_replysight_graph
-except ImportError:
-    # Fall back to direct imports (when Railway runs from root directory)
-    from api.config import get_settings
-    from api.models.api_models import ComplaintRequest, ResponseOutput
-    from api.graph import create_replysight_graph
+# try:
+# Try relative imports first (when imported as a module)
+from config import get_settings
+from models import ComplaintRequest, ResponseOutput
+from graph import create_replysight_graph
+
 
 
 class WorkflowService:
