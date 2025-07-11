@@ -12,9 +12,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from langsmith import traceable
 import uvicorn
 
-from backend.config import get_settings
-from backend.models import ComplaintRequest, ResponseOutput
-from backend.services import WorkflowService, GraphService
+from .config import get_settings
+from .models import ComplaintRequest, ResponseOutput
+from .services import WorkflowService, GraphService
 
 
 # Initialize settings
