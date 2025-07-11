@@ -298,7 +298,7 @@ The API supports dual deployment modes:
 
 ### **Configuration Files**
 - `vercel.json` - Vercel deployment configuration
-- `requirements-vercel.txt` - Production dependencies
+- `requirements.txt` - Python dependencies for all environments
 - `.vercelignore` - Files to exclude from deployment
 
 ## 🛡️ **Error Handling & Resilience**

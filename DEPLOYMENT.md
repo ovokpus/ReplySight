@@ -30,7 +30,7 @@ Your repository is already configured with:
 - ✅ Serverless functions in `/api/` directory
 - ✅ Updated `vercel.json` with functions and rewrites
 - ✅ Frontend configuration for Vercel deployment
-- ✅ Optimized `requirements-vercel.txt` for functions
+- ✅ Optimized `requirements.txt` for functions
 - ✅ `.vercelignore` for deployment optimization
 
 ### 2. Deploy to Vercel
@@ -148,7 +148,7 @@ ReplySight/
 │   ├── components/       # React components
 │   └── services/         # API services
 ├── vercel.json           # Vercel configuration
-├── requirements-vercel.txt # Python dependencies
+├── requirements.txt # Python dependencies
 └── .vercelignore         # Deployment exclusions
 ```
 
@@ -166,7 +166,7 @@ If functions timeout, check:
 #### 2. Import Errors
 
 If you see import errors:
-- Verify `requirements-vercel.txt` includes all dependencies
+- Verify `requirements.txt` includes all dependencies
 - Check that backend code is properly structured
 
 #### 3. CORS Issues
@@ -193,7 +193,7 @@ If functions can't access environment variables:
    - Check response status codes and error messages
 
 3. **Verify Dependencies**
-   - Ensure all required packages are in `requirements-vercel.txt`
+   - Ensure all required packages are in `requirements.txt`
    - Check for version compatibility issues
 
 ## Performance Optimization
@@ -201,7 +201,7 @@ If functions can't access environment variables:
 ### Cold Start Optimization
 
 - Functions are optimized for minimal cold start time
-- Only essential dependencies included in `requirements-vercel.txt`
+- Only essential dependencies included in `requirements.txt`
 - Lightweight imports in function handlers
 
 ### Caching Strategy
