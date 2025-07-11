@@ -17,12 +17,15 @@ export interface ResponseOutput {
 }
 
 export interface WorkflowGraphResponse {
-  mermaid: string;
-  metadata: {
-    version: string;
-    status: string;
-    note?: string;
-  };
+  workflow_name: string;
+  mermaid_diagram: string;
+  node_count: number;
+  edge_count: number;
+  nodes: string[];
+  edges: string[];
+  execution_flow: string[];
+  has_cycles: boolean;
+  status: string;
 }
 
 class ApiService {
@@ -99,4 +102,9 @@ class ApiService {
   }
 }
 
-export const apiService = new ApiService(); 
+export const apiService = new ApiService();
+
+// Standalone function for useGraphData hook
+export const fetchGraphData = async (): Promise<WorkflowGraphResponse> => {
+  return apiService.getWorkflowGraph();
+}; 

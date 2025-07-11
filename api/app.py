@@ -135,7 +135,7 @@ async def get_workflow_graph() -> Dict[str, Any]:
 
 if __name__ == "__main__":
     uvicorn.run(
-        "api:app",
+        "api.app:app",
         host=settings.host,
         port=settings.port,
         reload=settings.reload

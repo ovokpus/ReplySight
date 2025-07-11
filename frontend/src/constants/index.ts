@@ -156,6 +156,6 @@ export const PAGE_METADATA = {
   },
   GRAPH: {
     title: 'Workflow Diagram',
-    description: 'Interactive visualization of your Smart Study Buddy workflow',
+    description: 'Interactive visualization of your ReplySight workflow',
   },
 } as const; 
