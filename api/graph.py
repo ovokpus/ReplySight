@@ -120,23 +120,23 @@ class ReplySightAgent:
             
             system_message = SystemMessage(content=f"""You are an expert customer service research assistant. Your job is to analyze customer complaints and provide helpful, empathetic responses.
 
-COMPLAINT: {state['complaint']}
+                    COMPLAINT: {state['complaint']}
 
-RESEARCH STATUS:
-- ArXiv Research: {arxiv_status}
-- Tavily Examples: {tavily_status}
+                    RESEARCH STATUS:
+                    - ArXiv Research: {arxiv_status}
+                    - Tavily Examples: {tavily_status}
 
-Available tools:
-- arxiv_insights: Fetch academic research on customer service, empathy, service recovery
-- tavily_examples: Search for customer service best practices and real examples
+                    Available tools:
+                    - arxiv_insights: Fetch academic research on customer service, empathy, service recovery
+                    - tavily_examples: Search for customer service best practices and real examples
 
-Your workflow:
-1. Analyze the complaint to understand the customer's issue and emotional state
-2. If you need more research, call the appropriate tools
-3. If you have sufficient information, provide a comprehensive, empathetic response
-4. Focus on being helpful, specific, and actionable
+                    Your workflow:
+                    1. Analyze the complaint to understand the customer's issue and emotional state
+                    2. If you need more research, call the appropriate tools
+                    3. If you have sufficient information, provide a comprehensive, empathetic response
+                    4. Focus on being helpful, specific, and actionable
 
-Provide either tool calls for research OR a direct helpful response to the customer complaint.""")
+                    Provide either tool calls for research OR a direct helpful response to the customer complaint.""")
             
             messages = [system_message] + messages
         
@@ -176,24 +176,24 @@ Provide either tool calls for research OR a direct helpful response to the custo
         
         evaluation_prompt = f"""You are an expert evaluator of customer service responses. Please rate the following response to a customer complaint on a scale of 0.0 to 1.0.
 
-ORIGINAL COMPLAINT: {state['complaint']}
+                ORIGINAL COMPLAINT: {state['complaint']}
 
-RESPONSE TO EVALUATE: {last_ai_message.content}
+                RESPONSE TO EVALUATE: {last_ai_message.content}
 
-Rate this response based on:
-1. Empathy and understanding (25%)
-2. Addressing the specific issue (25%) 
-3. Providing actionable solutions (25%)
-4. Professional and helpful tone (25%)
+                Rate this response based on:
+                1. Empathy and understanding (25%)
+                2. Addressing the specific issue (25%) 
+                3. Providing actionable solutions (25%)
+                4. Professional and helpful tone (25%)
 
-Respond with ONLY a number between 0.0 and 1.0. Examples:
-- 0.9 = Excellent, comprehensive, empathetic response
-- 0.7 = Good response with minor improvements needed
-- 0.5 = Average response, missing key elements
-- 0.3 = Poor response, lacks empathy or solutions
-- 0.1 = Very poor response, unhelpful
+                Respond with ONLY a number between 0.0 and 1.0. Examples:
+                - 0.9 = Excellent, comprehensive, empathetic response
+                - 0.7 = Good response with minor improvements needed
+                - 0.5 = Average response, missing key elements
+                - 0.3 = Poor response, lacks empathy or solutions
+                - 0.1 = Very poor response, unhelpful
 
-Score:"""
+                Score:"""
 
         try:
             result = await self.helpfulness_checker.ainvoke([HumanMessage(content=evaluation_prompt)])

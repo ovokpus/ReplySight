@@ -184,6 +184,8 @@ Complaint In  ─▶  Parallel Evidence Fetch  ─▶  GPT-4o Composes Reply  �
 
 ---
 
+### LangGraph Orchestration Diagram
+
 ![image](./img/workflow.png)
 
 1. **Rep pastes a complaint** into the React/Next.js front end.  
@@ -362,12 +364,13 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000  # Local development
 
 ```mermaid
 graph TD
-    A[Customer Complaint Input] --> B[LangGraph Orchestrator]
-    B --> C[ArXiv Research Agent]
-    B --> D[Tavily Best Practices Agent]
+    A[Customer Complaint Input] --> B[LLM Agent - LangGraph Orchestrator]
+    B --> C[ArXiv Research Tool]
+    B --> D[Tavily Search Tool]
     C --> E[Research Synthesis]
+    E --> B
     D --> E
-    E --> F[Response Composition Agent]
+    B --> F[Response Composition Tool]
     F --> G[Quality Assurance Check]
     G --> H[Empathetic Response Output]
     
