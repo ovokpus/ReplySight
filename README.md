@@ -6,6 +6,12 @@
 
 ReplySight is an AI-powered customer service response generation system that creates **empathetic, research-backed replies** to customer complaints. The system combines academic research from arXiv with real-world best practices from web sources to compose citation-rich responses delivered in approximately 2 seconds.
 
+---
+
+![image](./img/chat-page.png)
+
+---
+
 ### **Key Value Proposition**
 - **2-second response generation** (vs 6-8 minutes manual)
 - **30% handle time reduction** 
