@@ -4,7 +4,7 @@
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/.next",
   "functions": {
-    "api/server.py": {
+    "api/app.py": {
       "maxDuration": 60,
       "memory": 2048
     }
@@ -16,7 +16,7 @@
     }
   ],
   "env": {
-    "PYTHONPATH": "/var/task:/var/task/api:/var/task/api/backend",
+    "PYTHONPATH": "/var/task:/var/task/api",
     "NEXT_PUBLIC_API_BASE_URL": ""
   },
   "headers": [
