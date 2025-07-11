@@ -1,15 +1,62 @@
 {
   "version": 2,
+  "installCommand": "cd frontend && npm install",
   "buildCommand": "cd frontend && npm run build",
   "outputDirectory": "frontend/.next",
-  "installCommand": "cd frontend && npm install",
   "framework": "nextjs",
   "functions": {
-    "api/**/*.py": {
-      "runtime": "python"
+    "api/health.py": {
+      "maxDuration": 30,
+      "memory": 1024
+    },
+    "api/respond.py": {
+      "maxDuration": 60,
+      "memory": 2048
+    },
+    "api/workflow/graph.py": {
+      "maxDuration": 30,
+      "memory": 1024
     }
   },
+  "rewrites": [
+    {
+      "source": "/api/health",
+      "destination": "/api/health.py"
+    },
+    {
+      "source": "/api/respond",
+      "destination": "/api/respond.py"
+    },
+    {
+      "source": "/api/workflow/graph",
+      "destination": "/api/workflow/graph.py"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "*"
+        }
+      ]
+    }
+  ],
   "env": {
+    "PYTHONPATH": "/var/task:/var/task/api",
     "NEXT_PUBLIC_API_BASE_URL": ""
   }
 }
