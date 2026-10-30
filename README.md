@@ -1,5 +1,7 @@
 # ReplySight
 
+<p align="center"><img src="docs/assets/hero.svg" alt="ReplySight" width="100%"/></p>
+
 **Research-backed customer-service replies from an agentic LangGraph workflow.**
 
 A support agent pastes a customer complaint. A GPT-4o agent searches arXiv for service-recovery research and the web (Tavily) for real-world examples, then drafts an empathetic reply with citations.
@@ -13,6 +15,8 @@ A support agent pastes a customer complaint. A GPT-4o agent searches arXiv for s
 Support reps lose minutes per ticket hunting for good phrasing and best practice. ReplySight puts that research behind a single button.
 
 ## 2. How it works
+
+<p align="center"><img src="docs/assets/flow.svg" alt="ReplySight data flow" width="100%"/></p>
 
 ```mermaid
 flowchart LR
