@@ -1,0 +1,64 @@
+{
+  "/health": {
+    "status": "healthy",
+    "service": "ReplySight API",
+    "version": "1.0.0",
+    "workflow": {
+      "status": "healthy",
+      "graph_compilation": "ok",
+      "visualization": "ok",
+      "node_count": 8,
+      "edge_count": 10,
+      "workflow_name": "ReplySight Smart Study Buddy with Decision Gate"
+    },
+    "dependencies": {
+      "openai": false,
+      "tavily": false,
+      "langsmith": false
+    }
+  },
+  "/workflow/graph": {
+    "workflow_name": "ReplySight Smart Study Buddy with Decision Gate",
+    "mermaid_diagram": "%%{init: {'flowchart': {'curve': 'linear'}}}%%\ngraph TD;\n\t__start__([<p>__start__</p>]):::first\n\tagent(agent)\n\tarxiv_tools(arxiv_tools)\n\ttavily_tools(tavily_tools)\n\textract_arxiv(extract_arxiv)\n\textract_tavily(extract_tavily)\n\tcompose(compose)\n\t__end__([<p>__end__</p>]):::last\n\t__start__ --> agent;\n\tarxiv_tools --> extract_arxiv;\n\textract_arxiv --> agent;\n\textract_tavily --> agent;\n\ttavily_tools --> extract_tavily;\n\tagent -.-> arxiv_tools;\n\tagent -.-> tavily_tools;\n\tagent -. &nbsp;action&nbsp; .-> compose;\n\tcompose -. &nbsp;continue&nbsp; .-> agent;\n\tcompose -. &nbsp;end&nbsp; .-> __end__;\n\tclassDef default fill:#f2f0ff,line-height:1.2\n\tclassDef first fill-opacity:0\n\tclassDef last fill:#bfb6fc\n",
+    "node_count": 8,
+    "edge_count": 10,
+    "nodes": [
+      "__start__",
+      "agent",
+      "arxiv_tools",
+      "tavily_tools",
+      "extract_arxiv",
+      "extract_tavily",
+      "compose",
+      "__end__"
+    ],
+    "edges": [
+      "__start__ \u2192 agent",
+      "arxiv_tools \u2192 extract_arxiv",
+      "extract_arxiv \u2192 agent",
+      "extract_tavily \u2192 agent",
+      "tavily_tools \u2192 extract_tavily",
+      "agent \u2192 arxiv_tools",
+      "agent \u2192 tavily_tools",
+      "agent \u2192 compose",
+      "compose \u2192 agent",
+      "compose \u2192 __end__"
+    ],
+    "execution_flow": [
+      "START \u2192 agent (analyze complaint)",
+      "agent \u2192 arxiv_tools (if ArXiv research needed)",
+      "agent \u2192 tavily_tools (if Tavily examples needed)",
+      "agent \u2192 action (route to next step)",
+      "action \u2192 compose (if research complete)",
+      "action \u2192 should_continue (if more work needed)",
+      "should_continue \u2192 continue (back to agent)",
+      "should_continue \u2192 end (if >10 messages or helpful \u22650.7)",
+      "arxiv_tools \u2192 extract_arxiv \u2192 agent",
+      "tavily_tools \u2192 extract_tavily \u2192 agent",
+      "compose \u2192 should_continue (decision gate)"
+    ],
+    "has_cycles": true,
+    "visualization_url": "https://mermaid.live",
+    "status": "active"
+  }
+}
