@@ -10,6 +10,10 @@ A support agent pastes a customer complaint. A GPT-4o agent searches arXiv for s
 
 ---
 
+## Business case
+
+Support agents lose time finding the right words for difficult complaints, and research on 5,179 support agents found AI assistance raised their productivity by 14% on average. ReplySight drafts an empathetic reply backed by service-recovery research and real examples, for the agent to edit and send. It works best as a drafting aid for newer agents. [docs/BUSINESS_CASE.md](docs/BUSINESS_CASE.md) covers the sourced evidence, use cases, an illustrative ROI model and the limits.
+
 ## 1. The problem
 
 Support reps lose minutes per ticket hunting for good phrasing and best practice. ReplySight puts that research behind a single button.
