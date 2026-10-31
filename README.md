@@ -1,6 +1,6 @@
-<p align="center"><img src="assets/banner.jpg" alt="Brass service bell beside a bundle of letters tied with red string and a magnifying glass on a dark surface" width="100%"></p>
-
 # ReplySight
+
+<p align="center"><img src="assets/banner.jpg" alt="Brass service bell beside a bundle of letters tied with red string and a magnifying glass on a dark surface" width="100%"></p>
 
 <p align="center"><img src="docs/assets/hero.svg" alt="ReplySight" width="100%"/></p>
 
